@@ -1,0 +1,29 @@
+{
+    "version": "1.0.0",
+    "name": "PolarisMail",
+    "description": "Professional email hosting service with advanced management features including email accounts, aliases, forwarding, distribution lists, DKIM, and branding.",
+    "authors": [
+        {
+            "name": "Phillips Data, Inc.",
+            "url": "http://www.blesta.com"
+        }
+    ],
+    "module_row": {
+        "name": "Server",
+        "plural": "Servers"
+    },
+    "module_group": "Server Group",
+    "supported_features": {
+        "package_options": true,
+        "single_sign_on": false,
+        "testable": false
+    },
+    "service_tabs": {
+        "tabClientAccounts": "Accounts",
+        "tabClientAliases": "Aliases",
+        "tabClientForwards": "Forwarding",
+        "tabClientLists": "Distribution Lists",
+        "tabClientDkim": "DKIM Setup",
+        "tabClientBranding": "Branding"
+    }
+}

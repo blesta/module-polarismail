@@ -1,0 +1,8 @@
+<?php
+if (!defined('POLARISMAIL_CLIENT_STYLES')) {
+    define('POLARISMAIL_CLIENT_STYLES', true);
+?>
+<link rel="stylesheet" type="text/css" href="<?php echo $this->view_dir;?>css/client_styles.css?v=<?php echo filemtime(dirname(__FILE__) . '/../css/client_styles.css');?>">
+<?php
+}
+?>

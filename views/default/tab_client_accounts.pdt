@@ -1,0 +1,629 @@
+<?php
+include __DIR__ . DS . 'partials' . DS . 'client_styles.pdt';
+
+$verification_required_flag = !empty($verification_required);
+$pending_label = $this->_('Polarismail.verification_pending_action.accounts', true);
+$pending_url = isset($pending_manage_uri) ? $pending_manage_uri : '';
+$pending_target = $this->Html->safe($pending_label);
+if (!empty($pending_url)) {
+    $pending_target = '<a href="' . $this->Html->safe($pending_url) . '"'
+        . ' class="polarismail-cta-link">'
+        . $this->Html->safe($pending_label)
+        . '</a>';
+}
+$pending_message = sprintf(
+    $this->_('Polarismail.verification_pending_action', true),
+    $pending_target
+);
+
+$accounts_list = [];
+if (isset($accounts) && is_array($accounts)) {
+    $accounts_list = $accounts;
+}
+
+$account_types_map = isset($account_types) && is_array($account_types)
+    ? $account_types
+    : [
+        1 => Language::_('Polarismail.package_fields.account_type_basic', true),
+        2 => Language::_('Polarismail.package_fields.account_type_enhanced', true)
+    ];
+$default_account_type_value = isset($default_account_type) ? (int) $default_account_type : 1;
+$default_quota_value = isset($default_quota) ? $default_quota : '10';
+$service_domain_name = isset($service_domain) ? $service_domain : '';
+$csv_format_text = isset($csv_format) ? $csv_format : '';
+$csv_example_text = isset($csv_example) ? $csv_example : '';
+
+$add_values = isset($add_values) && is_array($add_values) ? $add_values : [];
+$edit_values = isset($edit_values) && is_array($edit_values) ? $edit_values : [];
+$show_add_modal_flag = !empty($show_add_modal);
+$show_edit_modal_flag = !empty($show_edit_modal);
+
+$account_count = count($accounts_list);
+$format_metric = function ($value, $decimals = 0) {
+    if ($decimals > 0) {
+        $formatted = number_format((float) $value, $decimals, '.', '');
+        return $formatted !== '' ? rtrim(rtrim($formatted, '0'), '.') : '0';
+    }
+
+    return number_format((int) $value);
+};
+
+$get_value = function ($array, $key, $default = '') {
+    return isset($array[$key]) ? $array[$key] : $default;
+};
+?>
+<div class="polarismail-client-container polarismail-accounts">
+<?php if ($verification_required_flag) { ?>
+    <div class="card polarismail-card polarismail-card-locked">
+        <div class="card-header polarismail-card-header d-flex flex-column flex-md-row align-items-md-center justify-content-md-between">
+            <h4 class="mb-2 mb-md-0 d-flex align-items-center">
+                <i class="fas fa-lock mr-2"></i>
+                <?php $this->_('Polarismail.tab_client_accounts.card_manage_title'); ?>
+            </h4>
+            <span class="polarismail-card-subtitle small text-md-right">
+                <?php $this->_('Polarismail.tab_client_accounts.description'); ?>
+            </span>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-warning">
+                <?php echo $pending_message; ?>
+            </div>
+        </div>
+    </div>
+<?php } else { ?>
+    <div class="card polarismail-card">
+        <div class="card-header polarismail-card-header">
+            <div class="polarismail-card-header-main">
+                <h4 class="mb-2 mb-md-0 d-flex align-items-center">
+                    <i class="fas fa-folder-open mr-2"></i>
+                    <?php $this->_('Polarismail.tab_client_accounts.card_table_title'); ?>
+                </h4>
+                <span class="polarismail-card-subtitle small text-md-right">
+                    <?php $this->_('Polarismail.tab_client_accounts.card_table_subtitle'); ?>
+                </span>
+            </div>
+        </div>
+        <div class="card-body">
+            <?php
+            // Display account limits if they are configured
+            $show_limits = isset($max_basic_accounts) && isset($max_enhanced_accounts) && ($max_basic_accounts > 0 || $max_enhanced_accounts > 0);
+            if ($show_limits) {
+                $current_basic = isset($current_basic_accounts) ? $current_basic_accounts : 0;
+                $current_enhanced = isset($current_enhanced_accounts) ? $current_enhanced_accounts : 0;
+            ?>
+            <div class="alert alert-info mb-3">
+                <h6 class="mb-2"><i class="fas fa-info-circle"></i> Account Limits</h6>
+                <div class="row">
+                    <?php if ($max_basic_accounts > 0) { ?>
+                    <div class="col-md-6">
+                        <strong>Basic Accounts:</strong> <?php echo (int)$current_basic; ?> / <?php echo (int)$max_basic_accounts; ?>
+                        <?php if ($current_basic >= $max_basic_accounts) { ?>
+                            <span class="badge badge-danger ml-2">Limit Reached</span>
+                        <?php } ?>
+                    </div>
+                    <?php } ?>
+                    <?php if ($max_enhanced_accounts > 0) { ?>
+                    <div class="col-md-6">
+                        <strong>Enhanced Accounts:</strong> <?php echo (int)$current_enhanced; ?> / <?php echo (int)$max_enhanced_accounts; ?>
+                        <?php if ($current_enhanced >= $max_enhanced_accounts) { ?>
+                            <span class="badge badge-danger ml-2">Limit Reached</span>
+                        <?php } ?>
+                    </div>
+                    <?php } ?>
+                </div>
+            </div>
+            <?php } ?>
+
+            <div class="polarismail-card-intro mb-3">
+                <p class="mb-0 text-muted small">
+                    <?php $this->_('Polarismail.tab_client_accounts.card_table_description'); ?>
+                </p>
+                <div class="polarismail-card-actions">
+                    <a href="#" class="btn btn-primary" id="polarismail-add-account-button">
+                        <i class="fas fa-plus"></i>
+                        <?php $this->_('Polarismail.tab_client_accounts.option_add'); ?>
+                    </a>
+                    <a href="#" class="btn btn-outline-primary" id="polarismail-import-account-button">
+                        <i class="fas fa-file-upload"></i>
+                        <?php $this->_('Polarismail.tab_client_accounts.option_import'); ?>
+                    </a>
+                </div>
+            </div>
+
+            <?php if ($account_count > 0) { ?>
+            <div class="polarismail-table-wrapper">
+                <table class="table table-striped table-hover table-sm">
+                    <thead class="thead-light">
+                        <tr>
+                            <th><?php $this->_('Polarismail.tab_client_accounts.field_email'); ?></th>
+                            <th><?php $this->_('Polarismail.tab_client_accounts.field_account_type'); ?></th>
+                            <th><?php $this->_('Polarismail.tab_client_accounts.field_quota'); ?></th>
+                            <th><?php $this->_('Polarismail.tab_client_accounts.field_usage'); ?></th>
+                            <th><?php $this->_('Polarismail.tab_client_accounts.field_status'); ?></th>
+                            <th><?php $this->_('Polarismail.tab_client_accounts.field_last_login'); ?></th>
+                            <th class="text-center"><?php $this->_('Polarismail.tab_client_accounts.field_actions'); ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($accounts_list as $account) {
+                            $account_type_value = isset($account->account_type) ? (int) $account->account_type : $default_account_type_value;
+                            $account_type_label = isset($account_types_map[$account_type_value])
+                                ? $account_types_map[$account_type_value]
+                                : $account_types_map[$default_account_type_value];
+                            $status_class = !empty($account->disabled) ? 'polarismail-status-danger' : 'polarismail-status-success';
+                            $status_text = !empty($account->disabled)
+                                ? Language::_('Polarismail.tab_client_accounts.status_disabled', true)
+                                : Language::_('Polarismail.tab_client_accounts.status_active', true);
+                            $quota_numeric = isset($account->quota) && is_numeric($account->quota)
+                                ? round(((float) $account->quota) / 1000, 2)
+                                : 0;
+                            $quota_display = $format_metric($quota_numeric, 2);
+                            $usage_display = isset($account->usage) ? $account->usage : '0';
+                            $last_login = isset($account->lastauth_timestamp) ? $account->lastauth_timestamp : 'Never';
+                            $username_value = isset($account->username) ? $account->username : '';
+                            $email_value = isset($account->email) ? $account->email : ($username_value !== '' ? $username_value . '@' . $service_domain_name : '');
+                            $display_name_value = isset($account->uname) ? $account->uname : '';
+                        ?>
+                        <tr
+                            data-account-username="<?php echo $this->Html->safe($username_value); ?>"
+                            data-account-email="<?php echo $this->Html->safe($email_value); ?>"
+                            data-account-type="<?php echo (int) $account_type_value; ?>"
+                            data-account-quota="<?php echo $this->Html->safe($quota_numeric); ?>"
+                            data-account-name="<?php echo $this->Html->safe($display_name_value); ?>"
+                        >
+                            <td><?php echo $this->Html->safe($email_value); ?></td>
+                            <td><?php echo $this->Html->safe($account_type_label); ?></td>
+                            <td><?php echo $this->Html->safe($quota_display . ' GB'); ?></td>
+                            <td><?php echo $this->Html->safe($usage_display); ?></td>
+                            <td>
+                                <span class="polarismail-status <?php echo $status_class; ?>">
+                                    <?php echo $this->Html->safe($status_text); ?>
+                                </span>
+                            </td>
+                            <td><?php echo $this->Html->safe($last_login); ?></td>
+                            <td class="text-center">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <?php $this->_('Polarismail.tab_client_accounts.field_actions'); ?>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a href="#" class="dropdown-item edit-account">
+                                            <i class="fas fa-edit"></i> <?php $this->_('Polarismail.tab_client_accounts.option_edit'); ?>
+                                        </a>
+                                        <?php if (!empty($account->disabled)) { ?>
+                                        <a href="#" class="dropdown-item account-action-trigger" data-action="enable" data-username="<?php echo $this->Html->safe($username_value); ?>">
+                                            <i class="fas fa-check"></i> <?php $this->_('Polarismail.tab_client_accounts.option_enable'); ?>
+                                        </a>
+                                        <?php } else { ?>
+                                        <a href="#" class="dropdown-item account-action-trigger" data-action="disable" data-username="<?php echo $this->Html->safe($username_value); ?>">
+                                            <i class="fas fa-ban"></i> <?php $this->_('Polarismail.tab_client_accounts.option_disable'); ?>
+                                        </a>
+                                        <?php } ?>
+                                        <div class="dropdown-divider"></div>
+                                        <a href="#" class="dropdown-item text-danger account-action-trigger" data-action="delete" data-username="<?php echo $this->Html->safe($username_value); ?>">
+                                            <i class="fas fa-trash"></i> <?php $this->_('Polarismail.tab_client_accounts.option_delete'); ?>
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <?php } ?>
+                    </tbody>
+                </table>
+            </div>
+            <?php } else { ?>
+            <div class="polarismail-empty-state">
+                <?php $this->_('Polarismail.tab_client_accounts.text_no_accounts'); ?>
+            </div>
+            <?php } ?>
+        </div>
+    </div>
+<?php } ?>
+</div>
+
+<?php if (!$verification_required_flag) { ?>
+<?php
+// Action form for enable/disable/delete
+$this->Form->create(null, ['id' => 'polarismail-account-action-form']);
+$this->Form->fieldHidden('account_action', '');
+$this->Form->fieldHidden('account_username', '');
+$this->Form->end();
+?>
+
+<div class="modal fade" id="polarismail-add-modal" tabindex="-1" role="dialog" aria-labelledby="polarismail-add-title" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="polarismail-add-title"><?php $this->_('Polarismail.tab_client_accounts.modal_add_title'); ?></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <?php $this->Form->create(null, ['id' => 'polarismail-add-form']); ?>
+            <?php $this->Form->fieldHidden('account_action', 'add'); ?>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="polarismail-add-type"><?php $this->_('Polarismail.tab_client_accounts.field_account_type'); ?></label>
+                    <select class="form-control" id="polarismail-add-type" name="account_type">
+                        <?php foreach ($account_types_map as $type_key => $type_label) {
+                            $selected = ($type_key == $get_value($add_values, 'account_type', $default_account_type_value)) ? 'selected' : '';
+                        ?>
+                        <option value="<?php echo (int) $type_key; ?>" <?php echo $selected; ?>><?php echo $this->Html->safe($type_label); ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="polarismail-add-email"><?php $this->_('Polarismail.tab_client_accounts.field_username'); ?></label>
+                    <div class="input-group">
+                        <input
+                            type="text"
+                            class="form-control"
+                            id="polarismail-add-email"
+                            name="account_email"
+                            value="<?php echo $this->Html->safe($get_value($add_values, 'account_email')); ?>"
+                            placeholder="username"
+                            required
+                        >
+                        <div class="input-group-append">
+                            <span class="input-group-text">@<?php echo $this->Html->safe($service_domain_name); ?></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="polarismail-add-password"><?php $this->_('Polarismail.tab_client_accounts.field_password'); ?></label>
+                    <div class="input-group">
+                        <input
+                            type="password"
+                            class="form-control"
+                            id="polarismail-add-password"
+                            name="password"
+                            required
+                        >
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" id="polarismail-generate-password">
+                                <i class="fas fa-key"></i> <?php $this->_('Polarismail.tab_client_accounts.field_password_generate'); ?>
+                            </button>
+                            <button class="btn btn-outline-secondary" type="button" id="polarismail-toggle-password" title="Show/Hide Password">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <small class="form-text text-muted">
+                        <?php $this->_('Polarismail.tab_client_accounts.field_password_requirements'); ?>
+                    </small>
+                    <div class="invalid-feedback" id="polarismail-password-feedback" style="display: none;">
+                        <?php $this->_('Polarismail.tab_client_accounts.field_password_invalid'); ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="polarismail-add-quota"><?php $this->_('Polarismail.tab_client_accounts.field_quota'); ?></label>
+                    <input
+                        type="number"
+                        step="0.1"
+                        min="0.1"
+                        class="form-control"
+                        id="polarismail-add-quota"
+                        name="quota"
+                        value="<?php echo $this->Html->safe($get_value($add_values, 'quota', $default_quota_value)); ?>"
+                        required
+                    >
+                </div>
+                <div class="form-group">
+                    <label for="polarismail-add-name"><?php $this->_('Polarismail.tab_client_accounts.field_name'); ?></label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="polarismail-add-name"
+                        name="display_name"
+                        value="<?php echo $this->Html->safe($get_value($add_values, 'display_name')); ?>"
+                    >
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"><?php $this->_('Polarismail.tab_client_accounts.modal_close'); ?></button>
+                <button type="submit" class="btn btn-primary"><?php $this->_('Polarismail.tab_client_accounts.modal_save'); ?></button>
+            </div>
+            <?php $this->Form->end(); ?>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="polarismail-edit-modal" tabindex="-1" role="dialog" aria-labelledby="polarismail-edit-title" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="polarismail-edit-title"><?php $this->_('Polarismail.tab_client_accounts.modal_edit_title'); ?></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <?php $this->Form->create(null, ['id' => 'polarismail-edit-form']); ?>
+            <?php $this->Form->fieldHidden('account_action', 'edit'); ?>
+            <?php $this->Form->fieldHidden('account_username', $this->Html->safe($get_value($edit_values, 'account_username'))); ?>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="polarismail-edit-email"><?php $this->_('Polarismail.tab_client_accounts.field_email'); ?></label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="polarismail-edit-email"
+                        name="account_email"
+                        value="<?php echo $this->Html->safe($get_value($edit_values, 'account_email')); ?>"
+                        readonly
+                    >
+                </div>
+                <div class="form-group">
+                    <label for="polarismail-edit-password"><?php $this->_('Polarismail.tab_client_accounts.field_password_optional'); ?></label>
+                    <input
+                        type="password"
+                        class="form-control"
+                        id="polarismail-edit-password"
+                        name="password"
+                    >
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="polarismail-edit-quota"><?php $this->_('Polarismail.tab_client_accounts.field_quota'); ?></label>
+                        <input
+                            type="number"
+                            step="0.1"
+                            min="0.1"
+                            class="form-control"
+                            id="polarismail-edit-quota"
+                            name="quota"
+                            value="<?php echo $this->Html->safe($get_value($edit_values, 'quota', $default_quota_value)); ?>"
+                            required
+                        >
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="polarismail-edit-type"><?php $this->_('Polarismail.tab_client_accounts.field_account_type'); ?></label>
+                        <select class="form-control" id="polarismail-edit-type" name="account_type">
+                            <?php foreach ($account_types_map as $type_key => $type_label) {
+                                $selected = ($type_key == $get_value($edit_values, 'account_type', $default_account_type_value)) ? 'selected' : '';
+                            ?>
+                            <option value="<?php echo (int) $type_key; ?>" <?php echo $selected; ?>><?php echo $this->Html->safe($type_label); ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="polarismail-edit-name"><?php $this->_('Polarismail.tab_client_accounts.field_name'); ?></label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="polarismail-edit-name"
+                        name="display_name"
+                        value="<?php echo $this->Html->safe($get_value($edit_values, 'display_name')); ?>"
+                    >
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"><?php $this->_('Polarismail.tab_client_accounts.modal_close'); ?></button>
+                <button type="submit" class="btn btn-primary"><?php $this->_('Polarismail.tab_client_accounts.modal_save'); ?></button>
+            </div>
+            <?php $this->Form->end(); ?>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="polarismail-import-modal" tabindex="-1" role="dialog" aria-labelledby="polarismail-import-title" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="polarismail-import-title"><?php $this->_('Polarismail.tab_client_accounts.modal_import_title'); ?></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <?php $this->Form->create(null, ['id' => 'polarismail-import-form', 'enctype' => 'multipart/form-data']); ?>
+            <?php $this->Form->fieldHidden('account_action', 'import'); ?>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="polarismail-import-csv-file"><?php $this->_('Polarismail.tab_client_accounts.import_csv_file'); ?></label>
+                    <input
+                        type="file"
+                        class="form-control-file"
+                        id="polarismail-import-csv-file"
+                        name="accounts_csv"
+                        accept=".csv"
+                        required
+                    >
+                    <small class="form-text text-muted"><?php $this->_('Polarismail.tab_client_accounts.import_csv_hint'); ?></small>
+                </div>
+
+                <div class="mt-3">
+                    <div class="card polarismail-csv-instructions-card">
+                        <div class="card-header polarismail-csv-instructions-header">
+                            <a class="d-flex align-items-center text-decoration-none text-dark" data-toggle="collapse" href="#csv-instructions-collapse" role="button" aria-expanded="false" aria-controls="csv-instructions-collapse" id="csv-instructions-toggle">
+                                <i class="fas fa-plus-circle mr-2" id="csv-instructions-icon"></i>
+                                <span style="font-weight: 500;"><?php $this->_('Polarismail.tab_client_accounts.import_csv_instructions'); ?></span>
+                            </a>
+                        </div>
+                        <div class="collapse" id="csv-instructions-collapse">
+                            <div class="card-body polarismail-csv-instructions-body">
+                                <p class="mb-2"><strong><?php $this->_('Polarismail.tab_client_accounts.import_csv_format'); ?></strong></p>
+                                <p class="mb-2 text-muted">CSV columns: Account Type (1 = Basic, 2 = Enhanced), Username, Domain, Password, Quota (GB), Display Name.</p>
+                                <p class="mb-0"><strong><?php $this->_('Polarismail.tab_client_accounts.import_csv_example'); ?></strong> <code>1, sales, example.com, SecurePass!23, 5, Sales Team</code></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"><?php $this->_('Polarismail.tab_client_accounts.modal_close'); ?></button>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-upload"></i> <?php $this->_('Polarismail.tab_client_accounts.modal_import'); ?>
+                </button>
+            </div>
+            <?php $this->Form->end(); ?>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        var addModal = $('#polarismail-add-modal');
+        var editModal = $('#polarismail-edit-modal');
+        var deleteConfirm = <?php echo json_encode(Language::_('Polarismail.tab_client_accounts.confirm_delete', true)); ?>;
+        var importModal = $('#polarismail-import-modal');
+
+        // Password validation function
+        function validatePassword(password) {
+            if (password.length < 8) return false;
+            if (!/[A-Z]/.test(password)) return false;
+            if (!/[0-9]/.test(password)) return false;
+            if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) return false;
+            return true;
+        }
+
+        // Generate secure password
+        function generateSecurePassword() {
+            var length = 12;
+            var uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            var lowercase = 'abcdefghijklmnopqrstuvwxyz';
+            var numbers = '0123456789';
+            var symbols = '!@#$%^&*()_+-=[]{};\':"|,.<>/?';
+            var all = uppercase + lowercase + numbers + symbols;
+            var password = '';
+
+            // Ensure at least one of each required character type
+            password += uppercase.charAt(Math.floor(Math.random() * uppercase.length));
+            password += numbers.charAt(Math.floor(Math.random() * numbers.length));
+            password += symbols.charAt(Math.floor(Math.random() * symbols.length));
+
+            // Fill the rest randomly
+            for (var i = password.length; i < length; i++) {
+                password += all.charAt(Math.floor(Math.random() * all.length));
+            }
+
+            // Shuffle the password
+            password = password.split('').sort(function(){return 0.5-Math.random()}).join('');
+
+            return password;
+        }
+
+        // Generate password button click handler
+        $('#polarismail-generate-password').on('click', function(event) {
+            event.preventDefault();
+            var password = generateSecurePassword();
+            var passwordField = $('#polarismail-add-password');
+            passwordField.val(password);
+            passwordField.attr('type', 'text');
+            $('#polarismail-toggle-password i').removeClass('fa-eye').addClass('fa-eye-slash');
+
+            // Validate the generated password
+            if (validatePassword(password)) {
+                passwordField.removeClass('is-invalid').addClass('is-valid');
+                $('#polarismail-password-feedback').hide();
+            }
+        });
+
+        // Toggle password visibility
+        $('#polarismail-toggle-password').on('click', function(event) {
+            event.preventDefault();
+            var passwordField = $('#polarismail-add-password');
+            var icon = $(this).find('i');
+
+            if (passwordField.attr('type') === 'password') {
+                passwordField.attr('type', 'text');
+                icon.removeClass('fa-eye').addClass('fa-eye-slash');
+            } else {
+                passwordField.attr('type', 'password');
+                icon.removeClass('fa-eye-slash').addClass('fa-eye');
+            }
+        });
+
+        // Password validation on input
+        $('#polarismail-add-password').on('input', function() {
+            var password = $(this).val();
+            if (password.length === 0) {
+                $(this).removeClass('is-invalid is-valid');
+                $('#polarismail-password-feedback').hide();
+                return;
+            }
+
+            if (validatePassword(password)) {
+                $(this).removeClass('is-invalid').addClass('is-valid');
+                $('#polarismail-password-feedback').hide();
+            } else {
+                $(this).removeClass('is-valid').addClass('is-invalid');
+                $('#polarismail-password-feedback').show();
+            }
+        });
+
+        // Form validation on submit
+        $('#polarismail-add-form').on('submit', function(event) {
+            var password = $('#polarismail-add-password').val();
+            if (!validatePassword(password)) {
+                event.preventDefault();
+                $('#polarismail-add-password').addClass('is-invalid');
+                $('#polarismail-password-feedback').show();
+                return false;
+            }
+        });
+
+        $('#polarismail-add-account-button').on('click', function(event) {
+            event.preventDefault();
+            addModal.modal('show');
+        });
+
+        $('#polarismail-import-account-button').on('click', function(event) {
+            event.preventDefault();
+            importModal.modal('show');
+        });
+
+        $('.edit-account').on('click', function(event) {
+            event.preventDefault();
+            var row = $(this).closest('tr');
+            var username = row.attr('data-account-username');
+            var email = row.attr('data-account-email');
+            var accountType = row.attr('data-account-type');
+            var quota = row.attr('data-account-quota');
+            var displayName = row.attr('data-account-name');
+
+            editModal.find('input[name="account_username"]').val(username);
+            editModal.find('input[name="account_email"]').val(email);
+            editModal.find('select[name="account_type"]').val(accountType);
+            editModal.find('input[name="quota"]').val(quota);
+            editModal.find('input[name="display_name"]').val(displayName);
+            editModal.find('input[name="password"]').val('');
+
+            editModal.modal('show');
+        });
+
+        $('.account-action-trigger').on('click', function(event) {
+            event.preventDefault();
+            var action = $(this).data('action');
+            var username = $(this).data('username');
+
+            if (!action || !username) {
+                return;
+            }
+
+            if (action === 'delete' && !confirm(deleteConfirm)) {
+                return;
+            }
+
+            var form = $('#polarismail-account-action-form');
+            form.find('input[name="account_action"]').val(action);
+            form.find('input[name="account_username"]').val(username);
+            form.submit();
+        });
+
+        if (<?php echo $show_add_modal_flag ? 'true' : 'false'; ?>) {
+            addModal.modal('show');
+        }
+
+        if (<?php echo $show_edit_modal_flag ? 'true' : 'false'; ?>) {
+            editModal.modal('show');
+        }
+
+        // Toggle +/- icon for CSV instructions collapse
+        $('#csv-instructions-collapse').on('show.bs.collapse', function() {
+            $('#csv-instructions-icon').removeClass('fa-plus-circle').addClass('fa-minus-circle');
+        }).on('hide.bs.collapse', function() {
+            $('#csv-instructions-icon').removeClass('fa-minus-circle').addClass('fa-plus-circle');
+        });
+    });
+</script>
+<?php } ?>

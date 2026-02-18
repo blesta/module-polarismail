@@ -1,0 +1,135 @@
+<?php
+include __DIR__ . DS . 'partials' . DS . 'client_styles.pdt';
+
+$verification_required_flag = !empty($verification_required);
+$pending_label = $this->_('Polarismail.verification_pending_action.branding', true);
+$pending_url = isset($pending_manage_uri) ? $pending_manage_uri : '';
+$pending_target = $this->Html->safe($pending_label);
+if (!empty($pending_url)) {
+    $pending_target = '<a href="' . $this->Html->safe($pending_url) . '"'
+        . ' class="polarismail-cta-link">'
+        . $this->Html->safe($pending_label)
+        . '</a>';
+}
+$pending_message = sprintf(
+    $this->_('Polarismail.verification_pending_action', true),
+    $pending_target
+);
+
+$brand_info = isset($brand_info) && is_object($brand_info) ? $brand_info : null;
+$brand_values = isset($brand_values) && is_array($brand_values) ? $brand_values : [];
+$service_domain_name = isset($service_domain) ? $service_domain : '';
+
+$get_value = function ($array, $key, $default = '') {
+    return isset($array[$key]) ? $array[$key] : $default;
+};
+
+$brand_name_value = $get_value($brand_values, 'brand_name', $brand_info->brandname ?? '');
+$support_email_value = $get_value($brand_values, 'support_email', $brand_info->supportemail ?? '');
+$brand_color_value = $get_value($brand_values, 'brand_color', $brand_info->brandcolor ?? '#000000');
+$brand_logo_href = $brand_info->basic_logo_href ?? '';
+
+?>
+<div class="polarismail-client-container polarismail-branding">
+    <?php if ($verification_required_flag) { ?>
+    <div class="card polarismail-card polarismail-card-locked">
+        <div class="card-header polarismail-card-header d-flex flex-column flex-md-row align-items-md-center justify-content-md-between">
+            <h4 class="mb-2 mb-md-0 d-flex align-items-center">
+                <i class="fas fa-lock mr-2"></i>
+                <?php $this->_('Polarismail.tab_client_branding.card_manage_title'); ?>
+            </h4>
+            <span class="polarismail-card-subtitle small text-md-right">
+                <?php $this->_('Polarismail.tab_client_branding.description'); ?>
+            </span>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-warning">
+                <?php echo $pending_message; ?>
+            </div>
+        </div>
+    </div>
+    <?php } else { ?>
+    <?php $this->Form->create(null, ['enctype' => 'multipart/form-data', 'id' => 'polarismail-branding-form']); ?>
+    <div class="card polarismail-card">
+        <div class="card-header polarismail-card-header d-flex flex-column flex-md-row align-items-md-center justify-content-md-between">
+            <h4 class="mb-2 mb-md-0 d-flex align-items-center">
+                <i class="fas fa-paint-brush mr-2"></i>
+                <?php $this->_('Polarismail.tab_client_branding.card_manage_title'); ?>
+            </h4>
+            <span class="polarismail-card-subtitle small text-md-right">
+                <?php $this->_('Polarismail.tab_client_branding.description'); ?>
+            </span>
+        </div>
+        <div class="card-body polarismail-alert-spaced">
+            <div class="alert alert-info">
+                <?php $this->_('Polarismail.tab_client_branding.description_manage'); ?>
+            </div>
+
+            <?php $this->Form->fieldHidden('branding_action', 'update'); ?>
+
+            <div class="polarismail-form-grid">
+                <div class="form-group">
+                    <?php
+                    $this->Form->label($this->_('Polarismail.tab_client_branding.field_brand_name', true), 'brand_name');
+                    $this->Form->fieldText('brand_name', $this->Html->safe($brand_name_value), ['id' => 'brand_name', 'class' => 'form-control']);
+                    ?>
+                </div>
+
+                <div class="form-group">
+                    <?php
+                    $this->Form->label($this->_('Polarismail.tab_client_branding.field_support_email', true), 'support_email');
+                    $this->Form->fieldText('support_email', $this->Html->safe($support_email_value), ['id' => 'support_email', 'class' => 'form-control']);
+                    ?>
+                </div>
+
+                <div class="form-group">
+                    <?php
+                    $this->Form->label($this->_('Polarismail.tab_client_branding.field_brand_color', true), 'brand_color');
+                    $color_value = $brand_color_value !== '' ? '#' . ltrim($brand_color_value, '#') : '#000000';
+                    $this->Form->fieldText('brand_color', $color_value, ['id' => 'brand_color', 'class' => 'form-control', 'type' => 'color']);
+                    ?>
+                </div>
+
+                <div class="form-group">
+                    <?php $this->Form->label($this->_('Polarismail.tab_client_branding.field_logo', true), 'logo'); ?>
+                    <input type="file" name="logo" id="logo" accept="image/*" class="form-control">
+                    <?php if ($brand_logo_href !== '') { ?>
+                        <div class="mt-2">
+                            <img src="<?php echo $this->Html->safe($brand_logo_href); ?>" alt="Brand logo" class="img-fluid" style="max-height: 40px;">
+                        </div>
+                    <?php } ?>
+                    <small class="help-block"><?php $this->_('Polarismail.tab_client_branding.text_current_logo'); ?></small>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer polarismail-card-footer">
+            <div class="polarismail-form-actions">
+                <button type="submit" class="btn btn-success">
+                    <?php echo $this->_('Polarismail.tab_client_branding.option_update', true); ?>
+                </button>
+                <a href="#" class="btn btn-outline-secondary" id="reset-branding">
+                    <i class="fas fa-undo"></i> <?php $this->_('Polarismail.tab_client_branding.option_reset'); ?>
+                </a>
+            </div>
+        </div>
+    </div>
+    <?php $this->Form->end(); ?>
+
+    <?php $this->Form->create(null, ['id' => 'polarismail-branding-reset-form']); ?>
+    <?php $this->Form->fieldHidden('branding_action', 'reset'); ?>
+    <?php $this->Form->end(); ?>
+    <?php } ?>
+</div>
+
+<?php if (!$verification_required_flag) { ?>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#reset-branding').click(function(e) {
+            e.preventDefault();
+            if (confirm('<?php echo $this->_('Polarismail.tab_client_branding.confirm_reset', true); ?>')) {
+                $('#polarismail-branding-reset-form').submit();
+            }
+        });
+    });
+</script>
+<?php } ?>

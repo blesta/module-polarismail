@@ -1,0 +1,388 @@
+/**
+ * PolarisMail Client Styles
+ * Professional corporate design for client-side email management interface
+ */
+
+/* Container */
+.polarismail-client-container {
+    margin: 24px 0;
+}
+
+/* Cards */
+.polarismail-card {
+    border: 1px solid #d1d5db;
+    border-radius: 2px;
+    box-shadow: none;
+    margin-bottom: 20px;
+    overflow: hidden;
+    background-color: #ffffff;
+}
+
+.polarismail-card-locked {
+    border-color: #f59e0b;
+    border-left: 3px solid #f59e0b;
+}
+
+.polarismail-card-header {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 16px 20px;
+    color: #111827;
+}
+
+.polarismail-card-locked .polarismail-card-header {
+    background-color: #fffbeb;
+    border-bottom-color: #fde68a;
+    color: #92400e;
+}
+
+.polarismail-card-header h4 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: inherit;
+}
+
+.polarismail-card-header-main {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.polarismail-card-header h4 i {
+    width: auto;
+    height: auto;
+    border-radius: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    color: #6b7280;
+    font-size: 1rem;
+}
+
+.polarismail-card-locked .polarismail-card-header h4 i {
+    background: transparent;
+    color: #f59e0b;
+}
+
+.polarismail-card-subtitle {
+    color: #6b7280;
+    font-weight: 400;
+    font-size: 0.875rem;
+    display: block;
+    margin-top: 4px;
+    text-align: left;
+}
+
+@media (min-width: 768px) {
+    .polarismail-card-header-main {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .polarismail-card-subtitle {
+        margin-top: 0;
+        text-align: right;
+    }
+}
+
+.polarismail-card-header a,
+.polarismail-card-header a:hover,
+.polarismail-card-header a:focus {
+    color: inherit;
+}
+
+.polarismail-card-header a:hover,
+.polarismail-card-header a:focus {
+    text-decoration: underline;
+}
+
+.polarismail-card-body {
+    padding: 22px;
+    background-color: #ffffff;
+}
+
+.polarismail-card-footer {
+    padding: 16px 20px;
+    border-top: 1px solid #e5e7eb;
+    background-color: #ffffff;
+}
+
+.polarismail-card .card {
+    border: 1px solid #d1d5db;
+    border-radius: 2px;
+    box-shadow: none;
+    margin-bottom: 20px;
+}
+
+.polarismail-card .card:last-child {
+    margin-bottom: 0;
+}
+
+.polarismail-card .card-header:not(.polarismail-card-header) {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 14px 18px;
+    font-weight: 600;
+    color: #111827;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.polarismail-card .card-header:not(.polarismail-card-header) i {
+    color: #2563eb;
+}
+
+.polarismail-card .card:not(.polarismail-card) .card-body {
+    padding: 20px;
+}
+
+.polarismail-card-intro {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+@media (min-width: 768px) {
+    .polarismail-card-intro {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+.polarismail-card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+}
+
+.polarismail-card-header .polarismail-card-actions {
+    justify-content: flex-start;
+}
+
+/* Metrics */
+.polarismail-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+}
+
+.polarismail-metric {
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 2px;
+    padding: 16px;
+    text-align: center;
+}
+
+.polarismail-metric-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    color: #6b7280;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+
+.polarismail-metric-value {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+/* Tables */
+.polarismail-table-wrapper {
+    overflow-x: auto;
+}
+
+/* Empty State */
+.polarismail-empty-state {
+    padding: 22px;
+    border: 1px dashed #d1d5db;
+    border-radius: 2px;
+    background-color: #ffffff;
+    color: #6b7280;
+    text-align: center;
+    font-weight: 500;
+}
+
+/* Status Badges */
+.polarismail-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 10px;
+    border-radius: 2px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.polarismail-status-success {
+    background-color: rgba(59, 130, 246, 0.12);
+    color: #1d4ed8;
+}
+
+.polarismail-status-danger {
+    background-color: rgba(239, 68, 68, 0.15);
+    color: #b91c1c;
+}
+
+/* Forms */
+.polarismail-form-grid .form-group {
+    margin-bottom: 18px;
+}
+
+.polarismail-form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+}
+
+.polarismail-alert-spaced .alert {
+    margin-bottom: 14px;
+}
+
+.polarismail-section-subtitle {
+    margin-bottom: 14px;
+    color: #475569;
+}
+
+.polarismail-cta-link {
+    font-weight: 600;
+}
+
+/* Management Dashboard */
+.polarismail-management .polarismail-dashboard-header {
+    margin-bottom: 18px;
+}
+
+.polarismail-management .polarismail-dashboard-header p {
+    margin: 0;
+    color: #6b7280;
+}
+
+.polarismail-management .polarismail-dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-top: 18px;
+}
+
+.polarismail-management .polarismail-dashboard-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 2px;
+    padding: 20px 16px;
+    color: #111827;
+    text-decoration: none;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.polarismail-management .polarismail-dashboard-tile:hover,
+.polarismail-management .polarismail-dashboard-tile:focus {
+    text-decoration: none;
+    box-shadow: 0 10px 24px rgba(30, 41, 59, 0.12);
+    transform: translateY(-2px);
+}
+
+.polarismail-management .polarismail-dashboard-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+    color: #3b82f6;
+}
+
+.polarismail-management .polarismail-dashboard-label {
+    font-weight: 600;
+}
+
+.polarismail-management .polarismail-dashboard-empty {
+    margin-top: 10px;
+}
+
+.polarismail-management .polarismail-verification-table-card {
+    border: 1px solid #d1d5db;
+    border-radius: 2px;
+    box-shadow: none;
+    overflow: hidden;
+}
+
+.polarismail-management .polarismail-verification-table-card .card-header {
+    border-bottom: 1px solid #e5e7eb;
+    padding: 16px 20px;
+}
+
+.polarismail-management .polarismail-verification-table-card .card-body {
+    padding: 0;
+}
+
+.polarismail-management .polarismail-verification-table-card .table td {
+    padding: 12px 20px;
+    vertical-align: middle;
+}
+
+.polarismail-management .polarismail-verification-table table {
+    margin-bottom: 0;
+}
+
+/* CSV Import Modal Collapsible */
+.polarismail-csv-instructions-card {
+    border: 1px solid #d1d5db;
+    border-radius: 2px;
+}
+
+.polarismail-csv-instructions-header {
+    background-color: #ffffff;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid #e5e7eb;
+    border-radius: 0;
+}
+
+.polarismail-csv-instructions-body {
+    padding: 1rem;
+    background-color: #ffffff;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 767.98px) {
+    .polarismail-card-header {
+        padding: 16px 18px;
+    }
+
+    .polarismail-card-body {
+        padding: 18px;
+    }
+}
+
+@media (min-width: 768px) {
+    .polarismail-card-subtitle {
+        margin-top: 0;
+        text-align: right;
+    }
+
+    .polarismail-card-header .polarismail-card-actions {
+        justify-content: flex-end;
+    }
+}
+
+@media (max-width: 576px) {
+    .polarismail-management .polarismail-dashboard-grid {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    }
+}

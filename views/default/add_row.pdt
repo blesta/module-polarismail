@@ -1,0 +1,39 @@
+<?php
+$this->Widget->clear();
+$this->Widget->create($this->_('Polarismail.add_row.box_title', true), ['id' => 'polarismail_add_row']);
+?>
+<div class="inner">
+    <?php
+    $this->Form->create();
+    ?>
+    <div class="title_row first">
+        <h3><?php echo $this->_('Polarismail.add_row.basic_title');?></h3>
+    </div>
+    <div class="pad">
+        <ul>
+            <li>
+                <?php
+                $this->Form->label($this->_('Polarismail.row_meta.username', true), 'username');
+                $this->Form->fieldText('username', $this->Html->ifSet($vars->username), ['id' => 'username']);
+                ?>
+            </li>
+            <li>
+                <?php
+                $this->Form->label($this->_('Polarismail.row_meta.password', true), 'password');
+                $this->Form->fieldPassword('password', ['id' => 'password', 'value' => $this->Html->ifSet($vars->password)]);
+                ?>
+            </li>
+        </ul>
+    </div>
+    <div class="button_row">
+        <button type="submit" class="btn btn-primary pull-right">
+            <?php echo $this->_('Polarismail.add_row.add_btn'); ?>
+        </button>
+    </div>
+    <?php
+    $this->Form->end();
+    ?>
+</div>
+<?php
+$this->Widget->end();
+?>

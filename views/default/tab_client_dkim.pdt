@@ -1,0 +1,119 @@
+<?php
+include __DIR__ . DS . 'partials' . DS . 'client_styles.pdt';
+
+$button_text_key = !empty($dkim_status->enabled)
+    ? 'Polarismail.tab_client_dkim.option_disable'
+    : 'Polarismail.tab_client_dkim.option_enable';
+$button_class = !empty($dkim_status->enabled) ? 'btn btn-danger' : 'btn btn-success';
+$has_dns_details = !empty($dkim_status->has_details);
+$verification_required_flag = !empty($verification_required);
+$pending_label = $this->_('Polarismail.verification_pending_action.dkim', true);
+$pending_url = isset($pending_manage_uri) ? $pending_manage_uri : '';
+$pending_target = $this->Html->safe($pending_label);
+if (!empty($pending_url)) {
+    $pending_target = '<a href="' . $this->Html->safe($pending_url) . '"'
+        . ' class="polarismail-cta-link">'
+        . $this->Html->safe($pending_label)
+        . '</a>';
+}
+$pending_message = sprintf(
+    $this->_('Polarismail.verification_pending_action', true),
+    $pending_target
+);
+?>
+<div class="polarismail-client-container polarismail-dkim">
+    <?php if ($verification_required_flag) { ?>
+    <div class="card polarismail-card polarismail-card-locked">
+        <div class="card-header polarismail-card-header d-flex flex-column flex-md-row align-items-md-center justify-content-md-between">
+            <h4 class="mb-2 mb-md-0 d-flex align-items-center">
+                <i class="fas fa-lock mr-2"></i>
+                <?php $this->_('Polarismail.tab_client_dkim.heading'); ?>
+            </h4>
+            <span class="polarismail-card-subtitle small text-md-right">
+                <?php $this->_('Polarismail.tab_client_dkim.description'); ?>
+            </span>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-warning">
+                <?php echo $pending_message; ?>
+            </div>
+        </div>
+    </div>
+    <?php } else { ?>
+    <div class="card polarismail-card">
+        <div class="card-header polarismail-card-header d-flex flex-column flex-md-row align-items-md-center justify-content-md-between">
+            <h4 class="mb-2 mb-md-0 d-flex align-items-center">
+                <i class="fas fa-key mr-2"></i>
+                <?php $this->_('Polarismail.tab_client_dkim.heading'); ?>
+            </h4>
+            <span class="polarismail-card-subtitle small text-md-right">
+                <?php $this->_('Polarismail.tab_client_dkim.description'); ?>
+            </span>
+        </div>
+        <div class="card-body polarismail-alert-spaced">
+            <div class="alert alert-info">
+                <?php $this->_('Polarismail.tab_client_dkim.description'); ?>
+            </div>
+
+            <?php if (!empty($notice) && !empty($notice['message'])) { ?>
+            <div class="alert alert-<?php echo $notice['type'] === 'success' ? 'success' : 'danger'; ?>">
+                <?php echo $this->Html->safe($notice['message']); ?>
+            </div>
+            <?php } ?>
+
+            <div class="polarismail-form-grid">
+                <div class="form-group">
+                    <label><?php $this->_('Polarismail.tab_client_dkim.field_status'); ?></label>
+                    <input type="text" class="form-control" value="<?php echo $this->Html->safe($dkim_status->status_text ?? ''); ?>" readonly>
+                </div>
+
+                <?php if ($has_dns_details) { ?>
+                <div class="form-group">
+                    <label><?php $this->_('Polarismail.tab_client_dkim.field_host'); ?></label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="dkim-host" readonly value="<?php echo $this->Html->safe($dkim_status->host); ?>">
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-outline-secondary copy-to-clipboard" data-clipboard-target="#dkim-host">
+                                <i class="fas fa-copy"></i> <?php $this->_('Polarismail.tab_client_dkim.button_copy'); ?>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label><?php $this->_('Polarismail.tab_client_dkim.field_key'); ?></label>
+                    <div class="input-group">
+                        <textarea class="form-control" id="dkim-key" rows="6" readonly><?php echo $this->Html->safe($dkim_status->key); ?></textarea>
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-outline-secondary copy-to-clipboard" data-clipboard-target="#dkim-key">
+                                <i class="fas fa-copy"></i> <?php $this->_('Polarismail.tab_client_dkim.button_copy'); ?>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="alert alert-info">
+                    <?php
+                    if (!empty($dkim_status->enabled)) {
+                        $this->_('Polarismail.tab_client_dkim.text_instructions');
+                    } else {
+                        $this->_('Polarismail.tab_client_dkim.text_instructions_pending');
+                    }
+                    ?>
+                </div>
+                <?php } ?>
+            </div>
+        </div>
+        <div class="card-footer polarismail-card-footer">
+            <?php
+            $this->Form->create(null, ['class' => 'form-inline polarismail-dkim-toggle']);
+            $this->Form->fieldHidden('action', !empty($dkim_status->enabled) ? 'disable' : 'enable');
+            ?>
+            <button type="submit" class="<?php echo $button_class; ?>">
+                <?php $this->_($button_text_key); ?>
+            </button>
+            <?php $this->Form->end(); ?>
+        </div>
+    </div>
+    <?php } ?>
+</div>

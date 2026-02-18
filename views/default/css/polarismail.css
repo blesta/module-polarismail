@@ -1,0 +1,58 @@
+/**
+ * PolarisMail Module Styles
+ */
+
+.polarismail-accounts,
+.polarismail-aliases,
+.polarismail-forwards,
+.polarismail-lists,
+.polarismail-dkim,
+.polarismail-branding {
+    padding: 15px;
+}
+
+.polarismail-accounts .table-responsive {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.polarismail-accounts .dropdown-menu {
+    min-width: 200px;
+}
+
+.btn-row {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.polarismail-dkim .panel {
+    margin-top: 20px;
+}
+
+.polarismail-branding .form-group {
+    margin-bottom: 20px;
+}
+
+/* Status labels */
+.label-success {
+    background-color: #5cb85c;
+}
+
+.label-danger {
+    background-color: #d9534f;
+}
+
+.label-default {
+    background-color: #777;
+}
+
+/* Responsive table improvements */
+@media (max-width: 768px) {
+    .table-responsive {
+        border: 0;
+    }
+
+    .table-responsive table {
+        border: 1px solid #ddd;
+    }
+}

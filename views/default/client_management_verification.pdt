@@ -1,0 +1,200 @@
+<?php
+include __DIR__ . DS . 'partials' . DS . 'client_styles.pdt';
+
+$verification_message = '';
+$verification_value = '';
+if (is_object($verification_details)) {
+    $verification_message = $verification_details->message ?? '';
+    $verification_value = $verification_details->value ?? '';
+}
+
+$verification_required_flag = !empty($verification_required);
+$safe_domain = isset($domain) ? trim($domain) : '';
+
+$verification_instruction = sprintf(
+    Language::_('Polarismail.tab_client_dkim.verification_instruction', true),
+    '<strong>' . $this->Html->safe($safe_domain) . '</strong>'
+);
+
+$dashboard_tabs_list = isset($dashboard_tabs) && is_array($dashboard_tabs) ? $dashboard_tabs : [];
+$dashboard_heading = Language::_('Polarismail.client_dashboard.heading', true);
+$dashboard_description = Language::_('Polarismail.client_dashboard.description', true);
+
+if ($safe_domain !== '') {
+    $dashboard_description = sprintf(
+        Language::_('Polarismail.client_dashboard.description_domain', true),
+        '<strong>' . $this->Html->safe($safe_domain) . '</strong>'
+    );
+}
+?>
+
+<div class="polarismail-client-container polarismail-management">
+<?php if ($verification_required_flag) { ?>
+    <div id="polarismail-verification-lock" class="card polarismail-card polarismail-card-locked">
+        <div class="card-header polarismail-card-header d-flex flex-column flex-md-row align-items-md-center justify-content-md-between">
+            <h4 class="mb-2 mb-md-0 d-flex align-items-center">
+                <i class="fas fa-shield-alt mr-2"></i>
+                <?php $this->_('Polarismail.tab_client_dkim.heading'); ?>
+            </h4>
+            <span class="polarismail-card-subtitle small text-md-right">
+                <?php $this->_('Polarismail.tab_client_dkim.verification_intro'); ?>
+            </span>
+        </div>
+        <div class="card-body polarismail-alert-spaced">
+            <?php if (!empty($notice) && !empty($notice['message'])) { ?>
+            <div class="alert alert-<?php echo $notice['type'] === 'success' ? 'success' : ($notice['type'] === 'warning' ? 'warning' : 'danger'); ?>">
+                <?php echo $this->Html->safe($notice['message']); ?>
+            </div>
+            <?php } ?>
+
+            <?php if ($verification_message !== '') { ?>
+            <div class="alert alert-danger">
+                <?php echo $this->Html->safe($verification_message); ?>
+            </div>
+            <?php } ?>
+
+            <div class="alert alert-info">
+                <div class="mb-1"><?php $this->_('Polarismail.tab_client_dkim.verification_intro'); ?></div>
+                <div><?php echo $verification_instruction; ?></div>
+            </div>
+
+            <div class="card polarismail-verification-table-card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0 d-flex align-items-center">
+                        <i class="fas fa-list mr-2"></i>
+                        <?php $this->_('Polarismail.tab_client_dkim.verification_heading'); ?>
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm mb-0">
+                            <tbody>
+                                <tr>
+                                    <td><strong><?php $this->_('Polarismail.tab_client_dkim.verification_host'); ?></strong></td>
+                                    <td><?php echo $this->Html->safe(Language::_('Polarismail.tab_client_dkim.verification_host_value', true)); ?></td>
+                                </tr>
+                                <tr>
+                                    <td><strong><?php $this->_('Polarismail.tab_client_dkim.verification_type'); ?></strong></td>
+                                    <td><?php echo $this->Html->safe(Language::_('Polarismail.tab_client_dkim.verification_type_value', true)); ?></td>
+                                </tr>
+                                <tr>
+                                    <td><strong><?php $this->_('Polarismail.tab_client_dkim.verification_value'); ?></strong></td>
+                                    <td><?php echo $this->Html->safe($verification_value); ?></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer polarismail-card-footer d-flex flex-column flex-md-row align-items-md-center justify-content-md-between">
+            <div class="polarismail-card-actions">
+                <?php
+                $this->Form->create(null, ['class' => 'form-inline', 'id' => 'polarismail-verification-recheck-form']);
+                $this->Form->fieldHidden('action', 'recheck');
+                ?>
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                    id="polarismail-verification-recheck"
+                >
+                    <i class="fas fa-sync-alt"></i>
+                    <?php $this->_('Polarismail.tab_client_dkim.verification_recheck'); ?>
+                </button>
+                <?php $this->Form->end(); ?>
+            </div>
+            <span class="text-muted small mt-3 mt-md-0">
+                <?php $this->_('Polarismail.tab_client_dkim.verification_recheck_description'); ?>
+            </span>
+        </div>
+    </div>
+<?php } else { ?>
+    <div class="card polarismail-card">
+        <div class="card-header polarismail-card-header d-flex flex-column flex-md-row align-items-md-center justify-content-md-between">
+            <h4 class="mb-2 mb-md-0 d-flex align-items-center">
+                <i class="fas fa-th-large mr-2"></i>
+                <?php echo $this->Html->safe($dashboard_heading); ?>
+            </h4>
+            <span class="polarismail-card-subtitle small text-md-right">
+                <?php if ($safe_domain !== '') { echo $this->Html->safe($safe_domain); } ?>
+            </span>
+        </div>
+        <div class="card-body">
+            <div class="polarismail-dashboard-header">
+                <p><?php echo $dashboard_description; ?></p>
+            </div>
+            <?php if (!empty($dashboard_tabs_list)) { ?>
+            <div class="polarismail-dashboard-grid">
+                <?php foreach ($dashboard_tabs_list as $tab) {
+                    $tab_label = isset($tab['label']) ? $tab['label'] : '';
+                    $tab_href = isset($tab['href']) ? $tab['href'] : '';
+                    if ($tab_label === '' || $tab_href === '') {
+                        continue;
+                    }
+                    $tab_icon = isset($tab['icon']) ? $tab['icon'] : 'fas fa-cog';
+                ?>
+                <a class="polarismail-dashboard-tile" href="<?php echo $this->Html->safe($tab_href); ?>">
+                    <div class="polarismail-dashboard-icon">
+                        <i class="<?php echo $this->Html->safe($tab_icon); ?>" aria-hidden="true"></i>
+                    </div>
+                    <div class="polarismail-dashboard-label">
+                        <?php echo $this->Html->safe($tab_label); ?>
+                    </div>
+                </a>
+                <?php } ?>
+            </div>
+            <?php } else { ?>
+            <div class="alert alert-info polarismail-dashboard-empty">
+                <?php $this->_('Polarismail.client_dashboard.empty'); ?>
+            </div>
+            <?php } ?>
+        </div>
+    </div>
+<?php } ?>
+</div>
+
+<?php if ($verification_required_flag) { ?>
+<script>
+(function() {
+    var lock = document.getElementById('polarismail-verification-lock');
+    if (!lock) {
+        return;
+    }
+
+    function hideTabs(scope) {
+        if (!scope) {
+            return;
+        }
+
+        var tabs = scope.querySelector('.nav.nav-tabs');
+        if (tabs) {
+            tabs.style.pointerEvents = 'none';
+            tabs.style.opacity = '0.4';
+            tabs.setAttribute('aria-disabled', 'true');
+        }
+
+        var tabLinks = tabs ? tabs.querySelectorAll('a') : null;
+        if (tabLinks && tabLinks.length) {
+            Array.prototype.forEach.call(tabLinks, function(link) {
+                link.setAttribute('tabindex', '-1');
+                link.setAttribute('aria-disabled', 'true');
+                link.addEventListener('click', function(event) {
+                    event.preventDefault();
+                });
+            });
+        }
+    }
+
+    var current = lock.parentElement;
+    while (current) {
+        if (current.querySelector && current.querySelector('.nav.nav-tabs')) {
+            hideTabs(current);
+            break;
+        }
+        current = current.parentElement;
+    }
+
+    // Recheck button now uses form submission to pass action parameter
+})();
+</script>
+<?php } ?>
