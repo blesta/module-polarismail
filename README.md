@@ -75,9 +75,41 @@ blesta/                          # Upload this directory to /components/modules/
             └── polarismail.js   # Module JavaScript
 ```
 
+Use the following **Blesta Configuration Options** names so PolarismMail can detect limits correctly.
+
+> In Blesta, create these under **Packages → Configuration Options**, then assign them to your PolarismMail package.
+
+#### Mailboxes
+
+| Blesta Option Label | Blesta Option Name (recommended) | Type | Typical Min/Max |
+|---|---|---|---|
+| Basic Mailboxes | `basic_mailboxes` | Quantity | Min `1`, Max `100` |
+| Enhanced Mailboxes | `enhanced_mailboxes` | Quantity | Min `0`, Max `100` |
+
+#### Aliases and Lists
+
+| Blesta Option Label | Blesta Option Name (recommended) | Type | Typical Min/Max |
+|---|---|---|---|
+| Total Aliases | `total_aliases` | Quantity | Min `0`, Max `500` |
+| Total Distribution Lists | `total_distribution_lists` | Quantity | Min `0`, Max `50` |
+
+#### Quota
+
+| Blesta Option Label | Blesta Option Name (recommended) | Type | Notes |
+|---|---|---|---|
+| Mailbox Quota (GB) | `mailbox_quota_gb` | Quantity or Select | Per-mailbox quota |
+| Total Mailbox Quota (GB) | `total_mailbox_quota_gb` | Quantity | Total quota pool across accounts |
+
+#### Optional Account Type Override
+
+| Blesta Option Label | Blesta Option Name (recommended) | Type | Allowed Values |
+|---|---|---|---|
+| Default Account Type | `default_account_type` | Select / Quantity | `1` = Basic, `2` = Enhanced |
+
 ## Requirements
 
 - **Blesta**: 5.0 or higher
 - **PHP**: 7.4 or higher
 - **cURL**: PHP cURL extension enabled
 - **PolarisMail Account**: Active API credentials
+
