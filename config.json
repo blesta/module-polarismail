@@ -13,5 +13,9 @@
         "rows": "Polarismail.module_row_plural",
         "group": "Polarismail.module_group",
         "row_key": "server_name"
+    },
+    "logo": {
+        "light": "views/default/images/logo.svg",
+        "dark": "views/default/images/logo-dark.svg"
     }
 }
