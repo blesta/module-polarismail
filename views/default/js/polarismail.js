@@ -2,8 +2,23 @@
  * PolarisMail Module JavaScript
  */
 
-(function($) {
+(function() {
     'use strict';
+
+    /**
+     * Attach a delegated event handler to the document. Mirrors
+     * jQuery's $(document).on(type, selector, handler) where "this"
+     * inside the handler refers to the matched element.
+     */
+    function delegate(event_type, selector, handler) {
+        document.addEventListener(event_type, function(event) {
+            var element = event.target.closest(selector);
+
+            if (element && document.contains(element)) {
+                handler.call(element, event);
+            }
+        });
+    }
 
     // Main module object
     var PolarisMail = {
@@ -19,33 +34,33 @@
          */
         bindEvents: function() {
             // Account management
-            $(document).on('click', '#add-account', this.showAddAccountModal);
-            $(document).on('click', '.edit-account', this.showEditAccountModal);
-            $(document).on('click', '.delete-account', this.deleteAccount);
-            $(document).on('click', '.enable-account', this.enableAccount);
-            $(document).on('click', '.disable-account', this.disableAccount);
-            $(document).on('click', '.webmail-login', this.loginWebmail);
-            $(document).on('click', '.cp-login', this.loginControlPanel);
+            delegate('click', '#add-account', this.showAddAccountModal);
+            delegate('click', '.edit-account', this.showEditAccountModal);
+            delegate('click', '.delete-account', this.deleteAccount);
+            delegate('click', '.enable-account', this.enableAccount);
+            delegate('click', '.disable-account', this.disableAccount);
+            delegate('click', '.webmail-login', this.loginWebmail);
+            delegate('click', '.cp-login', this.loginControlPanel);
 
             // Alias management
-            $(document).on('click', '#add-alias', this.showAddAliasModal);
-            $(document).on('click', '.delete-alias', this.deleteAlias);
+            delegate('click', '#add-alias', this.showAddAliasModal);
+            delegate('click', '.delete-alias', this.deleteAlias);
 
             // Forward management
-            $(document).on('click', '#add-forward', this.showAddForwardModal);
-            $(document).on('click', '.delete-forward', this.deleteForward);
+            delegate('click', '#add-forward', this.showAddForwardModal);
+            delegate('click', '.delete-forward', this.deleteForward);
 
             // Distribution list management
-            $(document).on('click', '#add-list', this.showAddListModal);
-            $(document).on('click', '.edit-list', this.showEditListModal);
-            $(document).on('click', '.delete-list', this.deleteList);
+            delegate('click', '#add-list', this.showAddListModal);
+            delegate('click', '.edit-list', this.showEditListModal);
+            delegate('click', '.delete-list', this.deleteList);
 
             // Branding management
-            $(document).on('click', '#reset-branding', this.resetBranding);
+            delegate('click', '#reset-branding', this.resetBranding);
 
             // Utility actions
-            $(document).on('click', '.copy-to-clipboard', function(event) {
-                PolarisMail.copyToClipboard(event, $(this));
+            delegate('click', '.copy-to-clipboard', function(event) {
+                PolarisMail.copyToClipboard(event, this);
             });
         },
 
@@ -63,7 +78,7 @@
          */
         showEditAccountModal: function(e) {
             e.preventDefault();
-            var username = $(this).data('username');
+            var username = this.getAttribute('data-username');
             console.log('Show edit account modal for: ' + username);
         },
 
@@ -72,7 +87,7 @@
          */
         deleteAccount: function(e) {
             e.preventDefault();
-            var username = $(this).data('username');
+            var username = this.getAttribute('data-username');
 
             if (confirm('Are you sure you want to delete this email account?')) {
                 // Perform AJAX request to delete account
@@ -85,7 +100,7 @@
          */
         enableAccount: function(e) {
             e.preventDefault();
-            var username = $(this).data('username');
+            var username = this.getAttribute('data-username');
             console.log('Enable account: ' + username);
         },
 
@@ -94,7 +109,7 @@
          */
         disableAccount: function(e) {
             e.preventDefault();
-            var username = $(this).data('username');
+            var username = this.getAttribute('data-username');
 
             if (confirm('Are you sure you want to disable this email account?')) {
                 console.log('Disable account: ' + username);
@@ -106,7 +121,7 @@
          */
         loginWebmail: function(e) {
             e.preventDefault();
-            var username = $(this).data('username');
+            var username = this.getAttribute('data-username');
             console.log('Login to webmail: ' + username);
         },
 
@@ -115,7 +130,7 @@
          */
         loginControlPanel: function(e) {
             e.preventDefault();
-            var username = $(this).data('username');
+            var username = this.getAttribute('data-username');
             console.log('Login to control panel: ' + username);
         },
 
@@ -132,7 +147,7 @@
          */
         deleteAlias: function(e) {
             e.preventDefault();
-            var alias = $(this).data('alias');
+            var alias = this.getAttribute('data-alias');
 
             if (confirm('Are you sure you want to delete this alias?')) {
                 console.log('Delete alias: ' + alias);
@@ -152,7 +167,7 @@
          */
         deleteForward: function(e) {
             e.preventDefault();
-            var forward = $(this).data('forward');
+            var forward = this.getAttribute('data-forward');
 
             if (confirm('Are you sure you want to delete this forward?')) {
                 console.log('Delete forward: ' + forward);
@@ -172,7 +187,7 @@
          */
         showEditListModal: function(e) {
             e.preventDefault();
-            var listname = $(this).data('listname');
+            var listname = this.getAttribute('data-listname');
             console.log('Show edit list modal for: ' + listname);
         },
 
@@ -181,7 +196,7 @@
          */
         deleteList: function(e) {
             e.preventDefault();
-            var listname = $(this).data('listname');
+            var listname = this.getAttribute('data-listname');
 
             if (confirm('Are you sure you want to delete this distribution list?')) {
                 console.log('Delete list: ' + listname);
@@ -202,38 +217,38 @@
         /**
          * Copy the value of a target element to the clipboard
          */
-        copyToClipboard: function(event, $trigger) {
+        copyToClipboard: function(event, trigger) {
             if (event) {
                 event.preventDefault();
             }
 
-            var $source = $trigger && $trigger.length ? $trigger : $(event.currentTarget);
-            var targetSelector = $source.data('clipboard-target');
-            if (!targetSelector) {
+            var source = trigger ? trigger : event.currentTarget;
+            var target_selector = source.getAttribute('data-clipboard-target');
+            if (!target_selector) {
                 return;
             }
 
-            var $target = $(targetSelector);
-            if (!$target.length) {
+            var target = document.querySelector(target_selector);
+            if (!target) {
                 return;
             }
 
             var value = '';
-            if ($target.is('input, textarea')) {
-                value = $target.val();
+            if (target.matches('input, textarea')) {
+                value = target.value;
             } else {
-                value = $target.text();
+                value = target.textContent;
             }
 
-            var $helper = $('<textarea>').css({
-                position: 'absolute',
-                left: '-10000px',
-                top: '0',
-                opacity: '0'
-            });
+            var helper = document.createElement('textarea');
+            helper.style.position = 'absolute';
+            helper.style.left = '-10000px';
+            helper.style.top = '0';
+            helper.style.opacity = '0';
 
-            $('body').append($helper);
-            $helper.val(value).select();
+            document.body.appendChild(helper);
+            helper.value = value;
+            helper.select();
 
             try {
                 document.execCommand('copy');
@@ -241,17 +256,21 @@
                 // Clipboard copy not supported
             }
 
-            $helper.remove();
+            helper.parentNode.removeChild(helper);
 
-            if ($trigger && $trigger.length) {
-                $trigger.blur();
+            if (trigger) {
+                trigger.blur();
             }
         }
     };
 
     // Initialize on document ready
-    $(document).ready(function() {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            PolarisMail.init();
+        });
+    } else {
         PolarisMail.init();
-    });
+    }
 
-})(jQuery);
+})();
