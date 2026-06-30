@@ -35,10 +35,10 @@ $brand_logo_href = $brand_info->basic_logo_href ?? '';
     <div class="card polarismail-card polarismail-card-locked">
         <div class="card-header polarismail-card-header d-flex flex-column flex-md-row align-items-md-center justify-content-md-between">
             <h4 class="mb-2 mb-md-0 d-flex align-items-center">
-                <i class="fas fa-lock mr-2"></i>
+                <i class="bi bi-lock me-2"></i>
                 <?php $this->_('Polarismail.tab_client_branding.card_manage_title'); ?>
             </h4>
-            <span class="polarismail-card-subtitle small text-md-right">
+            <span class="polarismail-card-subtitle small text-md-end">
                 <?php $this->_('Polarismail.tab_client_branding.description'); ?>
             </span>
         </div>
@@ -53,10 +53,10 @@ $brand_logo_href = $brand_info->basic_logo_href ?? '';
     <div class="card polarismail-card">
         <div class="card-header polarismail-card-header d-flex flex-column flex-md-row align-items-md-center justify-content-md-between">
             <h4 class="mb-2 mb-md-0 d-flex align-items-center">
-                <i class="fas fa-paint-brush mr-2"></i>
+                <i class="bi bi-brush me-2"></i>
                 <?php $this->_('Polarismail.tab_client_branding.card_manage_title'); ?>
             </h4>
-            <span class="polarismail-card-subtitle small text-md-right">
+            <span class="polarismail-card-subtitle small text-md-end">
                 <?php $this->_('Polarismail.tab_client_branding.description'); ?>
             </span>
         </div>
@@ -98,7 +98,7 @@ $brand_logo_href = $brand_info->basic_logo_href ?? '';
                             <img src="<?php echo $this->Html->safe($brand_logo_href); ?>" alt="Brand logo" class="img-fluid" style="max-height: 40px;">
                         </div>
                     <?php } ?>
-                    <small class="help-block"><?php $this->_('Polarismail.tab_client_branding.text_current_logo'); ?></small>
+                    <small class="form-text"><?php $this->_('Polarismail.tab_client_branding.text_current_logo'); ?></small>
                 </div>
             </div>
         </div>
@@ -108,7 +108,7 @@ $brand_logo_href = $brand_info->basic_logo_href ?? '';
                     <?php echo $this->_('Polarismail.tab_client_branding.option_update', true); ?>
                 </button>
                 <a href="#" class="btn btn-outline-secondary" id="reset-branding">
-                    <i class="fas fa-undo"></i> <?php $this->_('Polarismail.tab_client_branding.option_reset'); ?>
+                    <i class="bi bi-arrow-counterclockwise"></i> <?php $this->_('Polarismail.tab_client_branding.option_reset'); ?>
                 </a>
             </div>
         </div>
@@ -122,12 +122,17 @@ $brand_logo_href = $brand_info->basic_logo_href ?? '';
 </div>
 
 <?php if (!$verification_required_flag) { ?>
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('#reset-branding').click(function(e) {
-            e.preventDefault();
-            if (confirm('<?php echo $this->_('Polarismail.tab_client_branding.confirm_reset', true); ?>')) {
-                $('#polarismail-branding-reset-form').submit();
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var reset_button = document.getElementById('reset-branding');
+        if (!reset_button) {
+            return;
+        }
+
+        reset_button.addEventListener('click', function(event) {
+            event.preventDefault();
+            if (confirm(<?php echo json_encode($this->_('Polarismail.tab_client_branding.confirm_reset', true)); ?>)) {
+                document.getElementById('polarismail-branding-reset-form').submit();
             }
         });
     });

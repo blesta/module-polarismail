@@ -56,10 +56,10 @@ $account_emails = array_unique($account_emails);
     <div class="card polarismail-card polarismail-card-locked">
         <div class="card-header polarismail-card-header d-flex flex-column flex-md-row align-items-md-center justify-content-md-between">
             <h4 class="mb-2 mb-md-0 d-flex align-items-center">
-                <i class="fas fa-lock mr-2"></i>
+                <i class="bi bi-lock me-2"></i>
                 <?php $this->_('Polarismail.tab_client_lists.card_manage_title'); ?>
             </h4>
-            <span class="polarismail-card-subtitle small text-md-right">
+            <span class="polarismail-card-subtitle small text-md-end">
                 <?php $this->_('Polarismail.tab_client_lists.description'); ?>
             </span>
         </div>
@@ -73,10 +73,10 @@ $account_emails = array_unique($account_emails);
     <div class="card polarismail-card">
         <div class="card-header polarismail-card-header d-flex flex-column flex-md-row align-items-md-center justify-content-md-between">
             <h4 class="mb-2 mb-md-0 d-flex align-items-center">
-                <i class="fas fa-list-ul mr-2"></i>
+                <i class="bi bi-list-ul me-2"></i>
                 <?php $this->_('Polarismail.tab_client_lists.card_manage_title'); ?>
             </h4>
-            <span class="polarismail-card-subtitle small text-md-right">
+            <span class="polarismail-card-subtitle small text-md-end">
                 <?php $this->_('Polarismail.tab_client_lists.description'); ?>
             </span>
         </div>
@@ -87,14 +87,10 @@ $account_emails = array_unique($account_emails);
         </div>
     </div>
 
-    
-
-    
-
     <div class="card polarismail-card">
         <div class="card-header polarismail-card-header d-flex flex-column flex-md-row align-items-md-center justify-content-md-between">
             <h4 class="mb-2 mb-md-0 d-flex align-items-center">
-                <i class="fas fa-plus-circle mr-2"></i>
+                <i class="bi bi-plus-circle me-2"></i>
                 <?php $this->_('Polarismail.tab_client_lists.heading_add'); ?>
             </h4>
         </div>
@@ -110,9 +106,9 @@ $account_emails = array_unique($account_emails);
             <?php } else { ?>
                 <?php $this->Form->create(null, ['id' => 'polarismail-list-add-form']); ?>
                 <?php $this->Form->fieldHidden('list_action', 'add'); ?>
-                <div class="form-row">
-                    <div class="form-group col-md-4">
-                        <label for="polarismail-list-name"><?php $this->_('Polarismail.tab_client_lists.field_list_name'); ?></label>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label for="polarismail-list-name" class="form-label"><?php $this->_('Polarismail.tab_client_lists.field_list_name'); ?></label>
                         <div class="input-group">
                             <input
                                 type="text"
@@ -123,20 +119,18 @@ $account_emails = array_unique($account_emails);
                                 placeholder="list-name"
                                 required
                             >
-                            <div class="input-group-append">
-                                <span class="input-group-text">@<?php echo $this->Html->safe($service_domain_name); ?></span>
-                            </div>
+                            <span class="input-group-text">@<?php echo $this->Html->safe($service_domain_name); ?></span>
                         </div>
                     </div>
-                    <div class="form-group col-md-4">
-                        <label for="polarismail-list-type"><?php $this->_('Polarismail.tab_client_lists.field_list_type'); ?></label>
-                        <select class="form-control" id="polarismail-list-type" name="ltype">
+                    <div class="col-md-4">
+                        <label for="polarismail-list-type" class="form-label"><?php $this->_('Polarismail.tab_client_lists.field_list_type'); ?></label>
+                        <select class="form-select" id="polarismail-list-type" name="ltype">
                             <option value="1" selected><?php echo $this->Html->safe($this->_('Polarismail.tab_client_lists.list_type_distribution', true)); ?></option>
                         </select>
                     </div>
-                    <div class="form-group col-md-4">
-                        <label for="polarismail-list-members"><?php $this->_('Polarismail.tab_client_lists.field_members'); ?></label>
-                        <select class="form-control" id="polarismail-list-members" name="members[]" multiple>
+                    <div class="col-md-4">
+                        <label for="polarismail-list-members" class="form-label"><?php $this->_('Polarismail.tab_client_lists.field_members'); ?></label>
+                        <select class="form-select" id="polarismail-list-members" name="members[]" multiple>
                             <?php foreach ($account_emails as $email) {
                                 $selected = in_array($email, $get_value($add_values, 'members', []), true) ? 'selected' : '';
                             ?>
@@ -146,8 +140,8 @@ $account_emails = array_unique($account_emails);
                         <small class="form-text text-muted"><?php $this->_('Polarismail.tab_client_lists.members_hint'); ?></small>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="polarismail-list-additional"><?php $this->_('Polarismail.tab_client_lists.field_additional_members'); ?></label>
+                <div class="mb-3 mt-3">
+                    <label for="polarismail-list-additional" class="form-label"><?php $this->_('Polarismail.tab_client_lists.field_additional_members'); ?></label>
                     <input
                         type="text"
                         class="form-control"
@@ -158,7 +152,7 @@ $account_emails = array_unique($account_emails);
                     >
                 </div>
                 <button type="submit" class="btn btn-success">
-                    <i class="fas fa-plus"></i>
+                    <i class="bi bi-plus"></i>
                     <?php $this->_('Polarismail.tab_client_lists.option_add'); ?>
                 </button>
                 <?php $this->Form->end(); ?>
@@ -169,10 +163,10 @@ $account_emails = array_unique($account_emails);
     <div class="card polarismail-card">
         <div class="card-header polarismail-card-header d-flex flex-column flex-md-row align-items-md-center justify-content-md-between">
             <h4 class="mb-2 mb-md-0 d-flex align-items-center">
-                <i class="fas fa-address-book mr-2"></i>
+                <i class="bi bi-person-lines-fill me-2"></i>
                 <?php $this->_('Polarismail.tab_client_lists.card_table_title'); ?>
             </h4>
-            <span class="polarismail-card-subtitle small text-md-right">
+            <span class="polarismail-card-subtitle small text-md-end">
                 <?php $this->_('Polarismail.tab_client_lists.description_table'); ?>
             </span>
         </div>
@@ -180,7 +174,7 @@ $account_emails = array_unique($account_emails);
             <?php if (!empty($lists_collection)) { ?>
             <div class="polarismail-table-wrapper">
                 <table class="table table-striped table-hover table-sm">
-                    <thead class="thead-light">
+                    <thead class="table-light">
                         <tr>
                             <th><?php $this->_('Polarismail.tab_client_lists.field_list_name'); ?></th>
                             <th><?php $this->_('Polarismail.tab_client_lists.field_list_type'); ?></th>
@@ -200,16 +194,16 @@ $account_emails = array_unique($account_emails);
                             <td><?php $this->Html->_($list_type_label); ?></td>
                             <td class="text-center">
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-cog"></i>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="bi bi-gear"></i>
                                     </button>
-                                    <div class="dropdown-menu dropdown-menu-right">
+                                    <div class="dropdown-menu dropdown-menu-end">
                                         <a href="#" class="dropdown-item edit-list" data-listname="<?php echo $this->Html->safe($list_name); ?>">
-                                            <i class="fas fa-tools"></i> <?php $this->_('Polarismail.tab_client_lists.option_edit'); ?>
+                                            <i class="bi bi-tools"></i> <?php $this->_('Polarismail.tab_client_lists.option_edit'); ?>
                                         </a>
                                         <div class="dropdown-divider"></div>
                                         <a href="#" class="dropdown-item text-danger delete-list" data-listname="<?php echo $this->Html->safe($list_name); ?>">
-                                            <i class="fas fa-trash"></i> <?php $this->_('Polarismail.tab_client_lists.option_delete'); ?>
+                                            <i class="bi bi-trash"></i> <?php $this->_('Polarismail.tab_client_lists.option_delete'); ?>
                                         </a>
                                     </div>
                                 </div>
@@ -248,23 +242,21 @@ $this->Form->end();
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="polarismail-list-edit-title"><?php $this->_('Polarismail.tab_client_lists.heading_edit'); ?></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <label><?php $this->_('Polarismail.tab_client_lists.field_list_name'); ?></label>
+                <div class="mb-3">
+                    <label class="form-label"><?php $this->_('Polarismail.tab_client_lists.field_list_name'); ?></label>
                     <input type="text" class="form-control" id="polarismail-list-edit-name" value="<?php echo $this->Html->safe($edit_list_name); ?>" readonly>
                 </div>
-                <div class="form-group">
-                    <label><?php $this->_('Polarismail.tab_client_lists.field_members'); ?></label>
+                <div class="mb-3">
+                    <label class="form-label"><?php $this->_('Polarismail.tab_client_lists.field_members'); ?></label>
                     <div id="polarismail-list-edit-members">
                         <?php foreach ($edit_members as $member) { ?>
                             <div class="d-flex align-items-center justify-content-between border rounded px-2 py-1 mb-2" data-member="<?php echo $this->Html->safe($member); ?>">
                                 <span><?php echo $this->Html->safe($member); ?></span>
                                 <button type="button" class="btn btn-sm btn-outline-danger remove-list-member">
-                                    <i class="fas fa-times"></i> <?php $this->_('Polarismail.tab_client_lists.option_remove'); ?>
+                                    <i class="bi bi-x-lg"></i> <?php $this->_('Polarismail.tab_client_lists.option_remove'); ?>
                                 </button>
                                 <input type="hidden" name="members[]" form="polarismail-list-edit-form" value="<?php echo $this->Html->safe($member); ?>">
                             </div>
@@ -272,8 +264,8 @@ $this->Form->end();
                     </div>
                     <small class="form-text text-muted"><?php $this->_('Polarismail.tab_client_lists.members_edit_hint'); ?></small>
                 </div>
-                <div class="form-group">
-                    <label for="polarismail-list-edit-add-member"><?php $this->_('Polarismail.tab_client_lists.field_add_member'); ?></label>
+                <div class="mb-3">
+                    <label for="polarismail-list-edit-add-member" class="form-label"><?php $this->_('Polarismail.tab_client_lists.field_add_member'); ?></label>
                     <div class="input-group">
                         <input
                             type="email"
@@ -281,86 +273,115 @@ $this->Form->end();
                             id="polarismail-list-edit-add-member"
                             placeholder="user@example.com"
                         >
-                        <div class="input-group-append">
-                            <button type="button" class="btn btn-outline-primary" id="polarismail-list-edit-add-button">
-                                <i class="fas fa-plus"></i> <?php $this->_('Polarismail.tab_client_lists.option_add_member'); ?>
-                            </button>
-                        </div>
+                        <button type="button" class="btn btn-outline-primary" id="polarismail-list-edit-add-button">
+                            <i class="bi bi-plus"></i> <?php $this->_('Polarismail.tab_client_lists.option_add_member'); ?>
+                        </button>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"><?php $this->_('Polarismail.tab_client_lists.option_cancel'); ?></button>
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"><?php $this->_('Polarismail.tab_client_lists.option_cancel'); ?></button>
                 <button type="submit" class="btn btn-primary" form="polarismail-list-edit-form">
-                    <i class="fas fa-save"></i> <?php $this->_('Polarismail.tab_client_lists.option_save'); ?>
+                    <i class="bi bi-save"></i> <?php $this->_('Polarismail.tab_client_lists.option_save'); ?>
                 </button>
             </div>
         </div>
     </div>
 </div>
 
-<script type="text/javascript">
-    $(function() {
-        var deleteConfirm = <?php echo json_encode(Language::_('Polarismail.tab_client_lists.confirm_delete', true)); ?>;
-        var editModal = $('#polarismail-list-edit-modal');
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var delete_confirm = <?php echo json_encode(Language::_('Polarismail.tab_client_lists.confirm_delete', true)); ?>;
+        var edit_modal = document.getElementById('polarismail-list-edit-modal');
+        var action_form = document.getElementById('polarismail-list-action-form');
 
-        $('.delete-list').on('click', function(event) {
-            event.preventDefault();
-            var listName = $(this).data('listname');
-            if (!listName || !confirm(deleteConfirm)) {
-                return;
-            }
+        document.querySelectorAll('.delete-list').forEach(function(link) {
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                var list_name = this.getAttribute('data-listname');
+                if (!list_name || !confirm(delete_confirm)) {
+                    return;
+                }
 
-            var form = $('#polarismail-list-action-form');
-            form.find('input[name="list_action"]').val('delete');
-            form.find('input[name="lname"]').val(listName);
-            form.submit();
+                action_form.querySelector('input[name="list_action"]').value = 'delete';
+                action_form.querySelector('input[name="lname"]').value = list_name;
+                action_form.submit();
+            });
         });
 
-        $('.edit-list').on('click', function(event) {
-            event.preventDefault();
-            var listName = $(this).data('listname');
-            if (!listName) {
-                return;
-            }
+        document.querySelectorAll('.edit-list').forEach(function(link) {
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                var list_name = this.getAttribute('data-listname');
+                if (!list_name) {
+                    return;
+                }
 
-            var form = $('#polarismail-list-action-form');
-            form.find('input[name="list_action"]').val('edit');
-            form.find('input[name="lname"]').val(listName);
-            form.submit();
+                action_form.querySelector('input[name="list_action"]').value = 'edit';
+                action_form.querySelector('input[name="lname"]').value = list_name;
+                action_form.submit();
+            });
         });
 
-        if (<?php echo $edit_list_name !== '' ? 'true' : 'false'; ?>) {
-            editModal.modal('show');
+        if (edit_modal && <?php echo $edit_list_name !== '' ? 'true' : 'false'; ?>) {
+            bootstrap.Modal.getOrCreateInstance(edit_modal).show();
         }
 
-        $('#polarismail-list-edit-add-button').on('click', function() {
-            var input = $('#polarismail-list-edit-add-member');
-            var email = $.trim(input.val());
-            if (!email) {
-                return;
-            }
+        var add_member_button = document.getElementById('polarismail-list-edit-add-button');
+        var members_container = document.getElementById('polarismail-list-edit-members');
 
-            var existing = $('#polarismail-list-edit-members').find('[data-member="' + email.replace(/"/g, '\\"') + '"]');
-            if (existing.length) {
-                input.val('');
-                return;
-            }
+        if (add_member_button && members_container) {
+            add_member_button.addEventListener('click', function() {
+                var input = document.getElementById('polarismail-list-edit-add-member');
+                var email = input.value.trim();
+                if (!email) {
+                    return;
+                }
 
-            var row = $('<div class="d-flex align-items-center justify-content-between border rounded px-2 py-1 mb-2" data-member=""></div>');
-            row.attr('data-member', email);
-            row.append($('<span></span>').text(email));
-            row.append(
-                $('<button type="button" class="btn btn-sm btn-outline-danger remove-list-member"><i class="fas fa-times"></i> <?php echo $this->Html->safe($this->_('Polarismail.tab_client_lists.option_remove', true)); ?></button>')
-            );
-            row.append($('<input type="hidden" name="members[]" form="polarismail-list-edit-form">').val(email));
-            $('#polarismail-list-edit-members').append(row);
-            input.val('');
-        });
+                var existing = members_container.querySelector('[data-member="' + email.replace(/"/g, '\\"') + '"]');
+                if (existing) {
+                    input.value = '';
+                    return;
+                }
 
-        $('#polarismail-list-edit-members').on('click', '.remove-list-member', function() {
-            $(this).closest('[data-member]').remove();
-        });
+                var row = document.createElement('div');
+                row.className = 'd-flex align-items-center justify-content-between border rounded px-2 py-1 mb-2';
+                row.setAttribute('data-member', email);
+
+                var label = document.createElement('span');
+                label.textContent = email;
+                row.appendChild(label);
+
+                var remove_button = document.createElement('button');
+                remove_button.type = 'button';
+                remove_button.className = 'btn btn-sm btn-outline-danger remove-list-member';
+                remove_button.innerHTML = '<i class="bi bi-x-lg"></i> ';
+                remove_button.appendChild(document.createTextNode(<?php echo json_encode($this->_('Polarismail.tab_client_lists.option_remove', true)); ?>));
+                row.appendChild(remove_button);
+
+                var hidden = document.createElement('input');
+                hidden.type = 'hidden';
+                hidden.name = 'members[]';
+                hidden.setAttribute('form', 'polarismail-list-edit-form');
+                hidden.value = email;
+                row.appendChild(hidden);
+
+                members_container.appendChild(row);
+                input.value = '';
+            });
+
+            members_container.addEventListener('click', function(event) {
+                var remove_trigger = event.target.closest('.remove-list-member');
+                if (!remove_trigger) {
+                    return;
+                }
+
+                var member_row = remove_trigger.closest('[data-member]');
+                if (member_row) {
+                    member_row.remove();
+                }
+            });
+        }
     });
 </script>
 <?php } ?>
