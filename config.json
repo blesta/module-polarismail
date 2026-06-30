@@ -14,6 +14,25 @@
         "group": "Polarismail.module_group",
         "row_key": "server_name"
     },
+    "email_tags": {
+        "module": [
+            "server_name",
+            "username"
+        ],
+        "package": [
+            "account_type",
+            "default_quota",
+            "twofa",
+            "accounts_access",
+            "aliases_access",
+            "forwards_access",
+            "lists_access",
+            "extra_quota_increments"
+        ],
+        "service": [
+            "polarismail_domain"
+        ]
+    },
     "logo": {
         "light": "views/default/images/logo.svg",
         "dark": "views/default/images/logo-dark.svg"
