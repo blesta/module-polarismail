@@ -24,9 +24,6 @@ class Polarismail extends Module
 
         // Load configuration required by this module
         $this->loadConfig(dirname(__FILE__) . DS . 'config.json');
-
-        // Load product configuration required by this module
-        Configure::load('polarismail', dirname(__FILE__) . DS . 'config' . DS);
     }
 
     /**
