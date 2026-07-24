@@ -915,7 +915,7 @@ class Polarismail extends Module
         }
 
         // Only provision the service if 'use_module' is true
-        if ($status == 'active') {
+        if (isset($vars['use_module']) && $vars['use_module'] == 'true') {
             try {
                 // Login to API
                 $token = $api->login();
