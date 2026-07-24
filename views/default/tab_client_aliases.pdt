@@ -42,10 +42,10 @@ $get_value = function ($array, $key, $default = '') {
     <div class="card polarismail-card polarismail-card-locked">
         <div class="card-header polarismail-card-header d-flex flex-column flex-md-row align-items-md-center justify-content-md-between">
             <h4 class="mb-2 mb-md-0 d-flex align-items-center">
-                <i class="fas fa-lock mr-2"></i>
+                <i class="bi bi-lock me-2"></i>
                 <?php $this->_('Polarismail.tab_client_aliases.card_manage_title'); ?>
             </h4>
-            <span class="polarismail-card-subtitle small text-md-right">
+            <span class="polarismail-card-subtitle small text-md-end">
                 <?php $this->_('Polarismail.tab_client_aliases.description'); ?>
             </span>
         </div>
@@ -59,10 +59,10 @@ $get_value = function ($array, $key, $default = '') {
     <div class="card polarismail-card">
         <div class="card-header polarismail-card-header d-flex flex-column flex-md-row align-items-md-center justify-content-md-between">
             <h4 class="mb-2 mb-md-0 d-flex align-items-center">
-                <i class="fas fa-envelope-open-text mr-2"></i>
+                <i class="bi bi-envelope-open me-2"></i>
                 <?php $this->_('Polarismail.tab_client_aliases.card_manage_title'); ?>
             </h4>
-            <span class="polarismail-card-subtitle small text-md-right">
+            <span class="polarismail-card-subtitle small text-md-end">
                 <?php $this->_('Polarismail.tab_client_aliases.description'); ?>
             </span>
         </div>
@@ -73,17 +73,13 @@ $get_value = function ($array, $key, $default = '') {
         </div>
     </div>
 
-    
-
-    
-
     <div class="card polarismail-card">
         <div class="card-header polarismail-card-header d-flex flex-column flex-md-row align-items-md-center justify-content-md-between">
             <h4 class="mb-2 mb-md-0 d-flex align-items-center">
-                <i class="fas fa-plus-circle mr-2"></i>
+                <i class="bi bi-plus-circle me-2"></i>
                 <?php $this->_('Polarismail.tab_client_aliases.card_create_title'); ?>
             </h4>
-            <span class="polarismail-card-subtitle small text-md-right">
+            <span class="polarismail-card-subtitle small text-md-end">
                 <?php $this->_('Polarismail.tab_client_aliases.description_create'); ?>
             </span>
         </div>
@@ -99,9 +95,9 @@ $get_value = function ($array, $key, $default = '') {
             <?php } else { ?>
                 <?php $this->Form->create(null, ['id' => 'polarismail-alias-add-form']); ?>
                 <?php $this->Form->fieldHidden('alias_action', 'add'); ?>
-                <div class="form-row align-items-end">
-                    <div class="form-group col-md-4">
-                        <label for="polarismail-alias"><?php $this->_('Polarismail.tab_client_aliases.field_alias'); ?></label>
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-4">
+                        <label for="polarismail-alias" class="form-label"><?php $this->_('Polarismail.tab_client_aliases.field_alias'); ?></label>
                         <div class="input-group">
                             <input
                                 type="text"
@@ -114,17 +110,17 @@ $get_value = function ($array, $key, $default = '') {
                             >
                         </div>
                     </div>
-                    <div class="form-group col-md-4">
-                        <label for="polarismail-alias-domain"><?php $this->_('Polarismail.tab_client_aliases.field_domain'); ?></label>
-                        <select class="form-control" id="polarismail-alias-domain" name="alias_domain" required>
+                    <div class="col-md-4">
+                        <label for="polarismail-alias-domain" class="form-label"><?php $this->_('Polarismail.tab_client_aliases.field_domain'); ?></label>
+                        <select class="form-select" id="polarismail-alias-domain" name="alias_domain" required>
                             <option value="<?php echo $this->Html->safe($service_domain_name); ?>" selected>
                                 <?php echo $this->Html->safe($service_domain_name); ?>
                             </option>
                         </select>
                     </div>
-                    <div class="form-group col-md-4">
-                        <label for="polarismail-forward"><?php $this->_('Polarismail.tab_client_aliases.field_forward'); ?></label>
-                        <select class="form-control" id="polarismail-forward" name="forward" required>
+                    <div class="col-md-4">
+                        <label for="polarismail-forward" class="form-label"><?php $this->_('Polarismail.tab_client_aliases.field_forward'); ?></label>
+                        <select class="form-select" id="polarismail-forward" name="forward" required>
                             <?php foreach ($accounts_list as $account) {
                                 $account_email = isset($account->email) ? $account->email : '';
                                 if ($account_email === '') {
@@ -138,9 +134,9 @@ $get_value = function ($array, $key, $default = '') {
                             <?php } ?>
                         </select>
                     </div>
-                    <div class="form-group col-md-12">
-                        <button type="submit" class="btn btn-success btn-block">
-                            <i class="fas fa-plus"></i>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-success w-100">
+                            <i class="bi bi-plus"></i>
                             <?php $this->_('Polarismail.tab_client_aliases.option_add'); ?>
                         </button>
                     </div>
@@ -153,10 +149,10 @@ $get_value = function ($array, $key, $default = '') {
     <div class="card polarismail-card">
         <div class="card-header polarismail-card-header d-flex flex-column flex-md-row align-items-md-center justify-content-md-between">
             <h4 class="mb-2 mb-md-0 d-flex align-items-center">
-                <i class="fas fa-layer-group mr-2"></i>
+                <i class="bi bi-layers me-2"></i>
                 <?php $this->_('Polarismail.tab_client_aliases.card_table_title'); ?>
             </h4>
-            <span class="polarismail-card-subtitle small text-md-right">
+            <span class="polarismail-card-subtitle small text-md-end">
                 <?php $this->_('Polarismail.tab_client_aliases.description_table'); ?>
             </span>
         </div>
@@ -164,7 +160,7 @@ $get_value = function ($array, $key, $default = '') {
             <?php if (!empty($aliases_list)) { ?>
             <div class="polarismail-table-wrapper">
                 <table class="table table-striped table-hover table-sm">
-                    <thead class="thead-light">
+                    <thead class="table-light">
                         <tr>
                             <th><?php $this->_('Polarismail.tab_client_aliases.field_forward'); ?></th>
                             <th><?php $this->_('Polarismail.tab_client_aliases.field_alias'); ?></th>
@@ -185,7 +181,7 @@ $get_value = function ($array, $key, $default = '') {
                             <td><?php $this->Html->_($alias_display); ?></td>
                             <td class="text-center">
                                 <button type="button" class="btn btn-sm btn-outline-danger delete-alias" data-alias="<?php echo $this->Html->safe($alias_local); ?>">
-                                    <i class="fas fa-trash"></i> <?php $this->_('Polarismail.tab_client_aliases.option_delete'); ?>
+                                    <i class="bi bi-trash"></i> <?php $this->_('Polarismail.tab_client_aliases.option_delete'); ?>
                                 </button>
                             </td>
                         </tr>
@@ -211,22 +207,24 @@ $this->Form->fieldHidden('alias', '');
 $this->Form->end();
 ?>
 
-<script type="text/javascript">
-    $(function() {
-        var deleteConfirm = <?php echo json_encode(Language::_('Polarismail.tab_client_aliases.confirm_delete', true)); ?>;
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var delete_confirm = <?php echo json_encode(Language::_('Polarismail.tab_client_aliases.confirm_delete', true)); ?>;
+        var action_form = document.getElementById('polarismail-alias-action-form');
 
-        $('.delete-alias').on('click', function(event) {
-            event.preventDefault();
-            var alias = $(this).data('alias');
+        document.querySelectorAll('.delete-alias').forEach(function(button) {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+                var alias = this.getAttribute('data-alias');
 
-            if (!alias || !confirm(deleteConfirm)) {
-                return;
-            }
+                if (!alias || !confirm(delete_confirm)) {
+                    return;
+                }
 
-            var form = $('#polarismail-alias-action-form');
-            form.find('input[name="alias_action"]').val('delete');
-            form.find('input[name="alias"]').val(alias);
-            form.submit();
+                action_form.querySelector('input[name="alias_action"]').value = 'delete';
+                action_form.querySelector('input[name="alias"]').value = alias;
+                action_form.submit();
+            });
         });
     });
 </script>

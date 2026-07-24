@@ -33,10 +33,10 @@ if ($safe_domain !== '') {
     <div id="polarismail-verification-lock" class="card polarismail-card polarismail-card-locked">
         <div class="card-header polarismail-card-header d-flex flex-column flex-md-row align-items-md-center justify-content-md-between">
             <h4 class="mb-2 mb-md-0 d-flex align-items-center">
-                <i class="fas fa-shield-alt mr-2"></i>
+                <i class="bi bi-shield-lock me-2"></i>
                 <?php $this->_('Polarismail.tab_client_dkim.heading'); ?>
             </h4>
-            <span class="polarismail-card-subtitle small text-md-right">
+            <span class="polarismail-card-subtitle small text-md-end">
                 <?php $this->_('Polarismail.tab_client_dkim.verification_intro'); ?>
             </span>
         </div>
@@ -61,7 +61,7 @@ if ($safe_domain !== '') {
             <div class="card polarismail-verification-table-card">
                 <div class="card-header bg-light">
                     <h5 class="mb-0 d-flex align-items-center">
-                        <i class="fas fa-list mr-2"></i>
+                        <i class="bi bi-list-ul me-2"></i>
                         <?php $this->_('Polarismail.tab_client_dkim.verification_heading'); ?>
                     </h5>
                 </div>
@@ -90,7 +90,7 @@ if ($safe_domain !== '') {
         <div class="card-footer polarismail-card-footer d-flex flex-column flex-md-row align-items-md-center justify-content-md-between">
             <div class="polarismail-card-actions">
                 <?php
-                $this->Form->create(null, ['class' => 'form-inline', 'id' => 'polarismail-verification-recheck-form']);
+                $this->Form->create(null, ['id' => 'polarismail-verification-recheck-form']);
                 $this->Form->fieldHidden('action', 'recheck');
                 ?>
                 <button
@@ -98,7 +98,7 @@ if ($safe_domain !== '') {
                     class="btn btn-primary"
                     id="polarismail-verification-recheck"
                 >
-                    <i class="fas fa-sync-alt"></i>
+                    <i class="bi bi-arrow-clockwise"></i>
                     <?php $this->_('Polarismail.tab_client_dkim.verification_recheck'); ?>
                 </button>
                 <?php $this->Form->end(); ?>
@@ -112,10 +112,10 @@ if ($safe_domain !== '') {
     <div class="card polarismail-card">
         <div class="card-header polarismail-card-header d-flex flex-column flex-md-row align-items-md-center justify-content-md-between">
             <h4 class="mb-2 mb-md-0 d-flex align-items-center">
-                <i class="fas fa-th-large mr-2"></i>
+                <i class="bi bi-grid-3x3-gap me-2"></i>
                 <?php echo $this->Html->safe($dashboard_heading); ?>
             </h4>
-            <span class="polarismail-card-subtitle small text-md-right">
+            <span class="polarismail-card-subtitle small text-md-end">
                 <?php if ($safe_domain !== '') { echo $this->Html->safe($safe_domain); } ?>
             </span>
         </div>
@@ -131,7 +131,7 @@ if ($safe_domain !== '') {
                     if ($tab_label === '' || $tab_href === '') {
                         continue;
                     }
-                    $tab_icon = isset($tab['icon']) ? $tab['icon'] : 'fas fa-cog';
+                    $tab_icon = isset($tab['icon']) ? $tab['icon'] : 'bi bi-gear';
                 ?>
                 <a class="polarismail-dashboard-tile" href="<?php echo $this->Html->safe($tab_href); ?>">
                     <div class="polarismail-dashboard-icon">

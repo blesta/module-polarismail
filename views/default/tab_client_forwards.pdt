@@ -40,10 +40,10 @@ $get_value = function ($array, $key, $default = '') {
     <div class="card polarismail-card polarismail-card-locked">
         <div class="card-header polarismail-card-header d-flex flex-column flex-md-row align-items-md-center justify-content-md-between">
             <h4 class="mb-2 mb-md-0 d-flex align-items-center">
-                <i class="fas fa-lock mr-2"></i>
+                <i class="bi bi-lock me-2"></i>
                 <?php $this->_('Polarismail.tab_client_forwards.card_manage_title'); ?>
             </h4>
-            <span class="polarismail-card-subtitle small text-md-right">
+            <span class="polarismail-card-subtitle small text-md-end">
                 <?php $this->_('Polarismail.tab_client_forwards.description'); ?>
             </span>
         </div>
@@ -57,10 +57,10 @@ $get_value = function ($array, $key, $default = '') {
     <div class="card polarismail-card">
         <div class="card-header polarismail-card-header d-flex flex-column flex-md-row align-items-md-center justify-content-md-between">
             <h4 class="mb-2 mb-md-0 d-flex align-items-center">
-                <i class="fas fa-share-square mr-2"></i>
+                <i class="bi bi-share me-2"></i>
                 <?php $this->_('Polarismail.tab_client_forwards.card_manage_title'); ?>
             </h4>
-            <span class="polarismail-card-subtitle small text-md-right">
+            <span class="polarismail-card-subtitle small text-md-end">
                 <?php $this->_('Polarismail.tab_client_forwards.description'); ?>
             </span>
         </div>
@@ -71,17 +71,13 @@ $get_value = function ($array, $key, $default = '') {
         </div>
     </div>
 
-    
-
-    
-
     <div class="card polarismail-card">
         <div class="card-header polarismail-card-header d-flex flex-column flex-md-row align-items-md-center justify-content-md-between">
             <h4 class="mb-2 mb-md-0 d-flex align-items-center">
-                <i class="fas fa-plus-circle mr-2"></i>
+                <i class="bi bi-plus-circle me-2"></i>
                 <?php $this->_('Polarismail.tab_client_forwards.card_create_title'); ?>
             </h4>
-            <span class="polarismail-card-subtitle small text-md-right">
+            <span class="polarismail-card-subtitle small text-md-end">
                 <?php $this->_('Polarismail.tab_client_forwards.description_create'); ?>
             </span>
         </div>
@@ -93,11 +89,11 @@ $get_value = function ($array, $key, $default = '') {
             <?php } else { ?>
                 <?php $this->Form->create(null, ['id' => 'polarismail-forward-add-form']); ?>
                 <?php $this->Form->fieldHidden('forward_action', 'add'); ?>
-                <div class="form-row align-items-end">
-                    <div class="form-group col-md-6">
-                        <label for="polarismail-forward-account"><?php $this->_('Polarismail.tab_client_forwards.field_account'); ?></label>
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-6">
+                        <label for="polarismail-forward-account" class="form-label"><?php $this->_('Polarismail.tab_client_forwards.field_account'); ?></label>
                         <div class="input-group">
-                            <select class="form-control" id="polarismail-forward-account" name="account" required>
+                            <select class="form-select" id="polarismail-forward-account" name="account" required>
                                 <?php foreach ($accounts_list as $account) {
                                     $account_username = isset($account->username) ? $account->username : '';
                                     if ($account_username === '' && isset($account->email)) {
@@ -117,28 +113,26 @@ $get_value = function ($array, $key, $default = '') {
                                 </option>
                                 <?php } ?>
                             </select>
-                            <div class="input-group-append">
-                                <span class="input-group-text">@<?php echo $this->Html->safe($service_domain_name); ?></span>
-                            </div>
+                            <span class="input-group-text">@<?php echo $this->Html->safe($service_domain_name); ?></span>
                         </div>
                     </div>
-                    <div class="form-group col-md-6">
-                        <label class="d-block"><?php $this->_('Polarismail.tab_client_forwards.field_type'); ?></label>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="forward-type-internal" class="custom-control-input" name="forward_type" value="1" <?php echo ((int) $get_value($add_values, 'forward_type', 1) === 1) ? 'checked' : ''; ?>>
-                            <label class="custom-control-label" for="forward-type-internal"><?php $this->_('Polarismail.tab_client_forwards.field_type_internal'); ?></label>
+                    <div class="col-md-6">
+                        <label class="d-block form-label"><?php $this->_('Polarismail.tab_client_forwards.field_type'); ?></label>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" id="forward-type-internal" class="form-check-input" name="forward_type" value="1" <?php echo ((int) $get_value($add_values, 'forward_type', 1) === 1) ? 'checked' : ''; ?>>
+                            <label class="form-check-label" for="forward-type-internal"><?php $this->_('Polarismail.tab_client_forwards.field_type_internal'); ?></label>
                         </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="forward-type-external" class="custom-control-input" name="forward_type" value="2" <?php echo ((int) $get_value($add_values, 'forward_type') === 2) ? 'checked' : ''; ?>>
-                            <label class="custom-control-label" for="forward-type-external"><?php $this->_('Polarismail.tab_client_forwards.field_type_external'); ?></label>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" id="forward-type-external" class="form-check-input" name="forward_type" value="2" <?php echo ((int) $get_value($add_values, 'forward_type') === 2) ? 'checked' : ''; ?>>
+                            <label class="form-check-label" for="forward-type-external"><?php $this->_('Polarismail.tab_client_forwards.field_type_external'); ?></label>
                         </div>
                     </div>
                 </div>
-                <div class="form-row align-items-end">
-                    <div class="form-group col-md-6" id="polarismail-forward-internal-group">
-                        <label for="polarismail-forward-internal"><?php $this->_('Polarismail.tab_client_forwards.field_forward'); ?></label>
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-6" id="polarismail-forward-internal-group">
+                        <label for="polarismail-forward-internal" class="form-label"><?php $this->_('Polarismail.tab_client_forwards.field_forward'); ?></label>
                         <div class="input-group">
-                            <select class="form-control" id="polarismail-forward-internal" name="internal_account">
+                            <select class="form-select" id="polarismail-forward-internal" name="internal_account">
                                 <?php foreach ($accounts_list as $account) {
                                     $account_username = isset($account->username) ? $account->username : '';
                                     if ($account_username === '' && isset($account->email)) {
@@ -158,13 +152,11 @@ $get_value = function ($array, $key, $default = '') {
                                 </option>
                                 <?php } ?>
                             </select>
-                            <div class="input-group-append">
-                                <span class="input-group-text">@<?php echo $this->Html->safe($service_domain_name); ?></span>
-                            </div>
+                            <span class="input-group-text">@<?php echo $this->Html->safe($service_domain_name); ?></span>
                         </div>
                     </div>
-                    <div class="form-group col-md-6" id="polarismail-forward-external-group">
-                        <label for="polarismail-forward-external"><?php $this->_('Polarismail.tab_client_forwards.field_forward'); ?></label>
+                    <div class="col-md-6" id="polarismail-forward-external-group">
+                        <label for="polarismail-forward-external" class="form-label"><?php $this->_('Polarismail.tab_client_forwards.field_forward'); ?></label>
                         <input
                             type="email"
                             class="form-control"
@@ -175,9 +167,9 @@ $get_value = function ($array, $key, $default = '') {
                         >
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="mt-3">
                     <button type="submit" class="btn btn-success">
-                        <i class="fas fa-plus"></i>
+                        <i class="bi bi-plus"></i>
                         <?php $this->_('Polarismail.tab_client_forwards.option_add'); ?>
                     </button>
                 </div>
@@ -189,10 +181,10 @@ $get_value = function ($array, $key, $default = '') {
     <div class="card polarismail-card">
         <div class="card-header polarismail-card-header d-flex flex-column flex-md-row align-items-md-center justify-content-md-between">
             <h4 class="mb-2 mb-md-0 d-flex align-items-center">
-                <i class="fas fa-random mr-2"></i>
+                <i class="bi bi-shuffle me-2"></i>
                 <?php $this->_('Polarismail.tab_client_forwards.card_table_title'); ?>
             </h4>
-            <span class="polarismail-card-subtitle small text-md-right">
+            <span class="polarismail-card-subtitle small text-md-end">
                 <?php $this->_('Polarismail.tab_client_forwards.description_table'); ?>
             </span>
         </div>
@@ -200,7 +192,7 @@ $get_value = function ($array, $key, $default = '') {
             <?php if (!empty($forwards_list)) { ?>
             <div class="polarismail-table-wrapper">
                 <table class="table table-striped table-hover table-sm">
-                    <thead class="thead-light">
+                    <thead class="table-light">
                         <tr>
                             <th><?php $this->_('Polarismail.tab_client_forwards.field_account'); ?></th>
                             <th><?php $this->_('Polarismail.tab_client_forwards.field_forward'); ?></th>
@@ -230,7 +222,7 @@ $get_value = function ($array, $key, $default = '') {
                             <td><?php $this->Html->_($forward_type_label); ?></td>
                             <td class="text-center">
                                 <button type="button" class="btn btn-sm btn-outline-danger delete-forward" data-forward="<?php echo $this->Html->safe($forward_value); ?>" data-account="<?php echo $this->Html->safe($account_value); ?>">
-                                    <i class="fas fa-trash"></i> <?php $this->_('Polarismail.tab_client_forwards.option_delete'); ?>
+                                    <i class="bi bi-trash"></i> <?php $this->_('Polarismail.tab_client_forwards.option_delete'); ?>
                                 </button>
                             </td>
                         </tr>
@@ -257,38 +249,49 @@ $this->Form->fieldHidden('account', '');
 $this->Form->end();
 ?>
 
-<script type="text/javascript">
-    $(function() {
-        var deleteConfirm = <?php echo json_encode(Language::_('Polarismail.tab_client_forwards.confirm_delete', true)); ?>;
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var delete_confirm = <?php echo json_encode(Language::_('Polarismail.tab_client_forwards.confirm_delete', true)); ?>;
+        var action_form = document.getElementById('polarismail-forward-action-form');
 
         function toggleForwardType() {
-            var forwardType = $('input[name="forward_type"]:checked').val();
-            if (forwardType === '2') {
-                $('#polarismail-forward-external-group').show();
-                $('#polarismail-forward-internal-group').hide();
-            } else {
-                $('#polarismail-forward-external-group').hide();
-                $('#polarismail-forward-internal-group').show();
-            }
-        }
-
-        $('input[name="forward_type"]').on('change', toggleForwardType);
-        toggleForwardType();
-
-        $('.delete-forward').on('click', function(event) {
-            event.preventDefault();
-            var forward = $(this).data('forward');
-            var account = $(this).data('account');
-
-            if (!forward || !account || !confirm(deleteConfirm)) {
+            var external_group = document.getElementById('polarismail-forward-external-group');
+            var internal_group = document.getElementById('polarismail-forward-internal-group');
+            if (!external_group || !internal_group) {
                 return;
             }
 
-            var form = $('#polarismail-forward-action-form');
-            form.find('input[name="forward_action"]').val('delete');
-            form.find('input[name="forward"]').val(forward);
-            form.find('input[name="account"]').val(account);
-            form.submit();
+            var checked = document.querySelector('input[name="forward_type"]:checked');
+            var forward_type = checked ? checked.value : '';
+            if (forward_type === '2') {
+                external_group.style.display = '';
+                internal_group.style.display = 'none';
+            } else {
+                external_group.style.display = 'none';
+                internal_group.style.display = '';
+            }
+        }
+
+        document.querySelectorAll('input[name="forward_type"]').forEach(function(radio) {
+            radio.addEventListener('change', toggleForwardType);
+        });
+        toggleForwardType();
+
+        document.querySelectorAll('.delete-forward').forEach(function(button) {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+                var forward = this.getAttribute('data-forward');
+                var account = this.getAttribute('data-account');
+
+                if (!forward || !account || !confirm(delete_confirm)) {
+                    return;
+                }
+
+                action_form.querySelector('input[name="forward_action"]').value = 'delete';
+                action_form.querySelector('input[name="forward"]').value = forward;
+                action_form.querySelector('input[name="account"]').value = account;
+                action_form.submit();
+            });
         });
     });
 </script>

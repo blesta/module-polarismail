@@ -1,29 +1,41 @@
 {
     "version": "1.0.0",
-    "name": "PolarisMail",
-    "description": "Professional email hosting service with advanced management features including email accounts, aliases, forwarding, distribution lists, DKIM, and branding.",
+    "name": "Polarismail.name",
+    "description": "Polarismail.description",
     "authors": [
         {
             "name": "Phillips Data, Inc.",
             "url": "http://www.blesta.com"
         }
     ],
-    "module_row": {
-        "name": "Server",
-        "plural": "Servers"
+    "module": {
+        "row": "Polarismail.module_row",
+        "rows": "Polarismail.module_row_plural",
+        "group": "Polarismail.module_group",
+        "row_key": "server_name"
     },
-    "module_group": "Server Group",
-    "supported_features": {
-        "package_options": true,
-        "single_sign_on": false,
-        "testable": false
+    "email_tags": {
+        "module": [
+            "server_name",
+            "username",
+            "password"
+        ],
+        "package": [
+            "account_type",
+            "default_quota",
+            "twofa",
+            "accounts_access",
+            "aliases_access",
+            "forwards_access",
+            "lists_access",
+            "extra_quota_increments"
+        ],
+        "service": [
+            "polarismail_domain"
+        ]
     },
-    "service_tabs": {
-        "tabClientAccounts": "Accounts",
-        "tabClientAliases": "Aliases",
-        "tabClientForwards": "Forwarding",
-        "tabClientLists": "Distribution Lists",
-        "tabClientDkim": "DKIM Setup",
-        "tabClientBranding": "Branding"
+    "logo": {
+        "light": "views/default/images/logo.svg",
+        "dark": "views/default/images/logo-dark.svg"
     }
 }

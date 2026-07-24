@@ -26,10 +26,10 @@ $pending_message = sprintf(
     <div class="card polarismail-card polarismail-card-locked">
         <div class="card-header polarismail-card-header d-flex flex-column flex-md-row align-items-md-center justify-content-md-between">
             <h4 class="mb-2 mb-md-0 d-flex align-items-center">
-                <i class="fas fa-lock mr-2"></i>
+                <i class="bi bi-lock me-2"></i>
                 <?php $this->_('Polarismail.tab_client_dkim.heading'); ?>
             </h4>
-            <span class="polarismail-card-subtitle small text-md-right">
+            <span class="polarismail-card-subtitle small text-md-end">
                 <?php $this->_('Polarismail.tab_client_dkim.description'); ?>
             </span>
         </div>
@@ -43,10 +43,10 @@ $pending_message = sprintf(
     <div class="card polarismail-card">
         <div class="card-header polarismail-card-header d-flex flex-column flex-md-row align-items-md-center justify-content-md-between">
             <h4 class="mb-2 mb-md-0 d-flex align-items-center">
-                <i class="fas fa-key mr-2"></i>
+                <i class="bi bi-key me-2"></i>
                 <?php $this->_('Polarismail.tab_client_dkim.heading'); ?>
             </h4>
-            <span class="polarismail-card-subtitle small text-md-right">
+            <span class="polarismail-card-subtitle small text-md-end">
                 <?php $this->_('Polarismail.tab_client_dkim.description'); ?>
             </span>
         </div>
@@ -72,11 +72,9 @@ $pending_message = sprintf(
                     <label><?php $this->_('Polarismail.tab_client_dkim.field_host'); ?></label>
                     <div class="input-group">
                         <input type="text" class="form-control" id="dkim-host" readonly value="<?php echo $this->Html->safe($dkim_status->host); ?>">
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-outline-secondary copy-to-clipboard" data-clipboard-target="#dkim-host">
-                                <i class="fas fa-copy"></i> <?php $this->_('Polarismail.tab_client_dkim.button_copy'); ?>
-                            </button>
-                        </span>
+                        <button type="button" class="btn btn-outline-secondary copy-to-clipboard" data-clipboard-target="#dkim-host">
+                            <i class="bi bi-clipboard"></i> <?php $this->_('Polarismail.tab_client_dkim.button_copy'); ?>
+                        </button>
                     </div>
                 </div>
 
@@ -84,11 +82,9 @@ $pending_message = sprintf(
                     <label><?php $this->_('Polarismail.tab_client_dkim.field_key'); ?></label>
                     <div class="input-group">
                         <textarea class="form-control" id="dkim-key" rows="6" readonly><?php echo $this->Html->safe($dkim_status->key); ?></textarea>
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-outline-secondary copy-to-clipboard" data-clipboard-target="#dkim-key">
-                                <i class="fas fa-copy"></i> <?php $this->_('Polarismail.tab_client_dkim.button_copy'); ?>
-                            </button>
-                        </span>
+                        <button type="button" class="btn btn-outline-secondary copy-to-clipboard" data-clipboard-target="#dkim-key">
+                            <i class="bi bi-clipboard"></i> <?php $this->_('Polarismail.tab_client_dkim.button_copy'); ?>
+                        </button>
                     </div>
                 </div>
 
@@ -106,7 +102,7 @@ $pending_message = sprintf(
         </div>
         <div class="card-footer polarismail-card-footer">
             <?php
-            $this->Form->create(null, ['class' => 'form-inline polarismail-dkim-toggle']);
+            $this->Form->create(null, ['class' => 'polarismail-dkim-toggle']);
             $this->Form->fieldHidden('action', !empty($dkim_status->enabled) ? 'disable' : 'enable');
             ?>
             <button type="submit" class="<?php echo $button_class; ?>">

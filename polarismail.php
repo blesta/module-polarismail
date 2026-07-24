@@ -24,9 +24,6 @@ class Polarismail extends Module
 
         // Load configuration required by this module
         $this->loadConfig(dirname(__FILE__) . DS . 'config.json');
-
-        // Load product configuration required by this module
-        Configure::load('cwatch', dirname(__FILE__) . DS . 'config' . DS);
     }
 
     /**
@@ -187,12 +184,12 @@ class Polarismail extends Module
         $client_tabs = $this->getClientTabs($package);
         $dashboard_tabs = [];
         $icon_map = [
-            'tabClientAccounts' => 'fas fa-users',
-            'tabClientAliases' => 'fas fa-at',
-            'tabClientForwards' => 'fas fa-share-square',
-            'tabClientLists' => 'fas fa-list',
-            'tabClientDkim' => 'fas fa-key',
-            'tabClientBranding' => 'fas fa-paint-brush'
+            'tabClientAccounts' => 'bi bi-people',
+            'tabClientAliases' => 'bi bi-at',
+            'tabClientForwards' => 'bi bi-share',
+            'tabClientLists' => 'bi bi-list-ul',
+            'tabClientDkim' => 'bi bi-key',
+            'tabClientBranding' => 'bi bi-brush'
         ];
 
         foreach ($client_tabs as $method => $tab) {
@@ -205,7 +202,7 @@ class Polarismail extends Module
                 'method' => $method,
                 'label' => $label,
                 'href' => $this->getServiceManageUri($service, $method),
-                'icon' => $icon_map[$method] ?? 'fas fa-cog'
+                'icon' => $icon_map[$method] ?? 'bi bi-gear'
             ];
         }
 
